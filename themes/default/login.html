@@ -144,10 +144,10 @@
                 url: frm.attr('action'),
                 data: frm.serialize(),
                 success: function (data) {
-                    alert('ok');
+
                 },
-                error:function () {
-                    alert('您输入的密码不正确！')
+                error:function (data) {
+                    alert(data.message);
                 }
             });
             ev.preventDefault();
