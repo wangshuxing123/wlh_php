@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>往来惠</title>
+    <meta content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" id="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"><!-- 删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"><!-- 设置苹果工具栏颜色 -->
+    <meta name="format-detection" content="telphone=no, email=no"><!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <!-- 启用360浏览器的极速模式(webkit) -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+    <meta name="HandheldFriendly" content="true">
+    <!-- 微软的老式浏览器 -->
+    <meta name="MobileOptimized" content="320">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!-- UC强制全屏
+    <meta name="full-screen" content="yes">-->
+    <!-- QQ强制全屏
+    <meta name="x5-fullscreen" content="true">-->
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app">
+    <!-- windows phone 点击无高光 -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- 适应移动端end -->
+    <meta name="nightmode" content="enable/disable">
+    <meta name="imagemode" content="force">
+    <meta name="format-detection" content="telephone=no,email=no">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/public.css');?>">
+    <style>
+        input{
+            border: none;
+            outline: none;
+        }
+        .header{
+            height: 40px;
+            line-height: 40px;
+            color: #7c7c7c;
+            border-bottom: 1px solid #babfb9;
+            background: #ffffff;
+            position: relative;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+        .header span{
+            font-size: 0.75rem;
+        }
+        .header a {
+            position: absolute;
+            right: 0;
+            top: 0;
+            margin-right: 1rem;
+            font-size: 0.75rem;
+            color: #7c7c7c;
+        }
+        .contain{
+            background: #f8f8f8;
+            text-align: center;
+        }
+        .contain img{
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            border: 1px solid #ececec;
+            margin: 3rem 0;
+        }
+        .contain input{
+            border: 1px solid #dedede;
+            height: 38px;
+            width: 11rem;
+            padding-left: 1rem;
+            font-size: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .contain label{
+            font-size: 0.75rem;
+            color: #f99519;
+        }
+        .contain .btn{
+            width:14rem;
+            height:38px;
+            background: #e6020f;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding:0;
+            margin-top: 1rem;
+        }
+    </style>
+    <script>
+        (function(){
+            function change(){
+                var font=document.documentElement.clientWidth/(320/20);
+                document.documentElement.style.fontSize=font+'px';
+            }
+            window.addEventListener('resize',change,false);
+            change();
+        })()
+    </script>
+</head>
+<body>
+    <div class="conBox">
+        <div class="header">
+            <span>登录</span>
+           
+        </div>
+        <div class="contain">
+            <img src="img/1.jpg" alt="">
+            <form action="<?php echo site_url('user/signin');?>" method="POST">
+                <div>
+                    <label>账户：</label>
+                    <input type="text" placeholder="请输入您的手机号" name="username">
+                </div>
+                <div>
+                    <label>密码：</label>
+                    <input type="password" placeholder="请输入您的密码" name="password">
+                </div>
+                <div>
+                    <input type="submit" value="登录" class="btn">
+                </div>
+                 <div>
+                    <input type="button" onclick="location.href='<?php echo site_url('user/register');?>'"  value="注册" class="btn">
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="<?php echo base_url('themes/default/js/zepto.min.js');?>" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
