@@ -128,5 +128,25 @@
         </div>
     </div>
     <script src="<?php echo base_url('themes/default/js/zepto.min.js');?>" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript">
+        var frm = $('#contactForm');
+        frm.submit(function (ev) {
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: frm.serialize(),
+                success: function (data) {
+                    if(data.success == 1){
+                        alert('注册成功');
+                        location.href = '/home/login';
+                    }
+                },
+                error:function (data) {
+                    alert(data.message);
+                }
+            });
+            ev.preventDefault();
+        });
+    </script>
 </body>
 </html>

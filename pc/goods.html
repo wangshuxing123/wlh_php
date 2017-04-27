@@ -1,0 +1,149 @@
+<?php $this->load->view('header.html');?>
+
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/shop_list.css');?>" type="text/css" />
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/shop_goods.css');?>" type="text/css" />
+   <script type="text/javascript" src="<?php echo base_url('themes/default/js/shop_goods.js');?>" ></script>
+	<div class="clear"></div>
+	<!-- 面包屑 注意首页没有 -->
+	<div class="shop_hd_breadcrumb">
+		<strong>当前位置：</strong>
+		<span>
+			<a href="">首页</a>&nbsp;›&nbsp;
+			<a href="">商品分类</a>&nbsp;›&nbsp;
+			<a href="">加油卡</a>&nbsp;›&nbsp;
+			<a href="">中国石化</a>
+		</span>
+	</div>
+	<div class="clear"></div>
+	<!-- 面包屑 End -->
+
+	<!-- Header End -->
+	
+	<!-- Goods Body -->
+	<div class="shop_goods_bd clear">
+
+		<!-- 商品展示 -->
+		<div class="shop_goods_show">
+			<div class="shop_goods_show_left">
+				<!-- 京东商品展示 -->
+				<link rel="stylesheet" href="<?php echo base_url('themes/default/css/shop_goodPic.css');?>" type="text/css" />
+				<script type="text/javascript" src="<?php echo base_url('themes/default/js/shop_goodPic_base.js');?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('themes/default/js/lib.js');?>"></script>
+				<script type="text/javascript" src="<?php echo base_url('themes/default/js/163css.js');?>"></script>
+				<div id="preview">
+					<div class=jqzoom id="spec-n1" onClick="window.open('/')"><IMG height="350" src="<?php echo base_url('public/uploads/').'/'.$goods['goods_img'];?>" jqimg="images/img04.jpg" width="350">
+						</div>
+						<div id="spec-n5">
+							<div class=control id="spec-left">
+								<img src="<?php echo base_url('themes/default/').'/';?>images/left.gif" />
+							</div>
+							<div id="spec-list">
+								<ul class="list-h">
+									<li><img src="<?php echo base_url('public/uploads/').'/'.$goods['goods_thumb'];?>"> </li>
+									<li><img src="<?php echo base_url('themes/default/').'/';?>images/img02.jpg"> </li>
+									
+								</ul>
+							</div>
+							<div class=control id="spec-right">
+								<img src="<?php echo base_url('themes/default/').'/';?>images/right.gif" />
+							</div>
+							
+					    </div>
+					</div>
+
+					<SCRIPT type=text/javascript>
+						$(function(){			
+						   $(".jqzoom").jqueryzoom({
+								xzoom:400,
+								yzoom:400,
+								offset:10,
+								position:"right",
+								preload:1,
+								lens:1
+							});
+							$("#spec-list").jdMarquee({
+								deriction:"left",
+								width:350,
+								height:56,
+								step:2,
+								speed:4,
+								delay:10,
+								control:true,
+								_front:"#spec-right",
+								_back:"#spec-left"
+							});
+							$("#spec-list img").bind("mouseover",function(){
+								var src=$(this).attr("src");
+								$("#spec-n1 img").eq(0).attr({
+									src:src.replace("\/n5\/","\/n1\/"),
+									jqimg:src.replace("\/n5\/","\/n0\/")
+								});
+								$(this).css({
+									"border":"2px solid #ff6600",
+									"padding":"1px"
+								});
+							}).bind("mouseout",function(){
+								$(this).css({
+									"border":"1px solid #ccc",
+									"padding":"2px"
+								});
+							});				
+						})
+						</SCRIPT>
+					<!-- 京东商品展示 End -->
+
+			</div>
+			<div class="shop_goods_show_right">
+			<form action ="<?php echo site_url('cart/add');?>" method="post">
+				<ul>
+					<li>
+						<strong style="font-size:14px; font-weight:bold;"><?php echo $goods['goods_name'];?></strong>
+					</li>
+					<li>
+						<label>价格：</label>
+						<span><strong><?php echo $goods['shop_price'];?></strong>元</span>
+					</li>
+					<li>
+						<label>运费：</label>
+						<span>卖家承担运费</span>
+					</li>
+					<li>
+						<label>累计售出：</label>
+						<span>99件</span>
+					</li>
+					<li>
+						<label>评价：</label>
+						<span>0条评论</span>
+					</li>
+					<li class="goods_num">
+						<label>购买数量：</label>
+						<span><a class="good_num_jian" id="good_num_jian" href="javascript:void(0);"></a><input type="text" name="goods_nums" value="1" id="good_nums" class="good_nums" /><a href="javascript:void(0);" id="good_num_jia" class="good_num_jia"></a>(当前库存<?php echo $goods['goods_number'];?>件)</span>
+					</li>
+					<input type="hidden" name="goods_name" value="<?php echo $goods['goods_name'];?>">
+					<input type="hidden" name="shop_price" value="<?php echo $goods['shop_price'];?>">
+					<input type="hidden" name="goods_id" value="<?php echo $goods['goods_id'];?>">
+
+					<li style="padding:20px 0;">
+						<label>&nbsp;</label>
+						<span>
+							<input type="image" src="<?php echo base_url('themes/default/images/add_cart.png');?>">
+						</span>
+					</li>
+				</ul>
+			</form>
+			</div>
+		</div>
+		<!-- 商品展示 End -->
+
+		<div class="clear mt15"></div>
+		<!-- Goods Left -->
+		
+		<!-- Goods Left End -->
+
+		<!-- 商品详情 -->
+		<script type="text/javascript" src="<?php echo base_url('themes/default/js/shop_goods_tab.js');?>"></script>
+		
+		<!-- 商品详情 End -->
+
+	</div>
+	<!-- Goods Body End -->

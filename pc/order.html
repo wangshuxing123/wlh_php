@@ -1,0 +1,93 @@
+<?php $this->load->view('header.html');?>
+
+
+<link rel="stylesheet" href="<?php echo base_url('themes/default/css/shop_gouwuche.css');?>" type="text/css" />
+   <script type="text/javascript" src="<?php echo base_url('themes/default/js/jquery.goodnums.js');?>" ></script>
+   <script type="text/javascript" src="<?php echo base_url('themes/default/js/shop_gouwuche.js');?>" ></script>
+
+	<div class="clear"></div>
+	<!-- 面包屑 注意首页没有 -->
+	<div class="shop_hd_breadcrumb">
+		<strong>当前位置：</strong>
+		<span>
+			<a href="">首页</a>&nbsp;›&nbsp;
+			<a href="">我的商城</a>&nbsp;›&nbsp;
+			<a href="">订单确认</a>
+		</span>
+	</div>
+	<div class="clear"></div>
+	<!-- 面包屑 End -->
+
+	<!-- Header End -->
+	
+	<!-- 购物车 Body -->
+	<div class="shop_gwc_bd clearfix">
+		
+		<!-- 购物车有商品 -->
+		<div class="shop_gwc_bd_contents clearfix">
+			<!-- 购物流程导航 -->
+			<div class="shop_gwc_bd_contents_lc clearfix">
+				<ul>
+					<li class="step_a">确认购物清单</li>
+					<li class="step_b hover_b">确认收货人资料及送货方式</li>
+					<li class="step_c">购买完成</li>
+				</ul>
+			</div>
+			<!-- 购物流程导航 End -->
+			<table>
+				
+				<thead>
+					<tr>
+						<th><span>收货人姓名</span></th>
+						<th><span>详细地址</span></th>
+						<th><span>手机号码</span></th>
+						
+					</tr>
+				</thead>
+				<tbody>
+				
+					<tr>	
+						<td ><?php echo $address['consignee'];?></td>
+						<td ><?php echo $address['street'];?></td>
+						<td ><?php echo $address['mobile'];?></td>
+					</tr>
+				<tr>
+						<td colspan="6">
+							<div class="gwc_foot_links">
+								<a href="<?php echo site_url('address/show_address');?>" class="op">收货地址管理</a>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<textarea cols="140" rows="10" name="postscripts" placeholder="输入你想说的话" >  请输入备注信息
+			</textarea>
+			<table>
+				
+			
+				<tbody>
+					<?php foreach($carts as $cart) :?>
+						<tr>
+							<td class="gwc_list_pic"><img width="100" height="50" src="<?php echo base_url('public/uploads/shihua.jpg');?>" /></td>
+							<td class="gwc_list_title"><?php echo $cart['name'];?></td>
+							<td class="gwc_list_danjia"><span>￥<strong id="danjia_001"><?php echo $cart['price'].'X'.$cart['qty'] ;?></strong></span></td>
+						</tr>
+					<?php endforeach;?>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="6">
+							<div class="gwc_foot_zongjia">商品总价(不含运费)<span>￥<strong id="good_zongjia"><?php echo $this->cart->format_number($this->cart->total()); ?></strong></span></div>
+							<div class="clear"></div>
+							<div class="gwc_foot_links">
+								<a href="<?php echo site_url('order/submit_order');?>" class="op">提交并支付</a>
+							</div>
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<!-- 购物车有商品 end -->
+
+	</div>
+	<!-- 购物车 Body End -->

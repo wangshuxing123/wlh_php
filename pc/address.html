@@ -1,0 +1,114 @@
+<?php $this->load->view('header.html');?>
+
+
+<link rel="stylesheet" href="<?php echo base_url('themes/default/css/shop_gouwuche.css');?>" type="text/css" />
+   <script type="text/javascript" src="<?php echo base_url('themes/default/js/jquery.goodnums.js');?>" ></script>
+   <script type="text/javascript" src="<?php echo base_url('themes/default/js/shop_gouwuche.js');?>" ></script>
+
+	<div class="clear"></div>
+	<!-- 面包屑 注意首页没有 -->
+	<div class="shop_hd_breadcrumb">
+		<strong>当前位置：</strong>
+		<span>
+			<a href="">首页</a>&nbsp;›&nbsp;
+			<a href="">我的商城</a>&nbsp;›&nbsp;
+			<a href="">我的购物车</a>
+		</span>
+	</div>
+	<div class="clear"></div>
+	<!-- 面包屑 End -->
+
+	<!-- Header End -->
+	
+	<!-- 购物车 Body -->
+	<div class="shop_gwc_bd clearfix">
+		
+		<!-- 购物车有商品 -->
+		<div class="shop_gwc_bd_contents clearfix">
+			<!-- 购物流程导航 -->
+			
+			<!-- 购物流程导航 End -->
+			<table>
+				
+				<thead>
+					<tr>
+						<th><span>默认地址</span></th>
+						<th><span>收货人姓名</span></th>
+						<th><span>详细地址</span></th>
+						<th><span>手机号码</span></th>
+						<th><span>操作</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach($address as $addr) :?>
+					<tr>
+						<td class="gwc_list_pic">
+							<?php if ($addr['default']=='1') :?>
+							<input checked="true" type="radio" name="radiobutton" value="radiobutton" /> 
+							<?php else :?>
+							<input checked="false" type="radio" name="radiobutton" value="radiobutton" />
+							<?php endif;?>
+							</td>
+						<td ><?php echo $addr['consignee'];?></td>
+						<td ><?php echo $addr['province'].$addr['city'].$addr['district'].$addr['street'];?></td>
+						<td ><?php echo $addr['mobile'];?></td>
+						<td ><a href="<?php echo site_url('address/delete_address').'/'.$addr['address_id'];?>" >删除</a></td>
+											</tr>
+				<?php endforeach;?>
+				</tbody>
+			
+			</table>
+			
+			<!-- 购物车列表 -->
+				<form action="<?php echo site_url('address/create_address');?>" method="post"> 			
+				<table>
+					<tbody>
+				   <tr> <!--运单信息--> 
+				   <th colspan="2" bgcolor="#cccccc">地址管理</th> 
+				   </tr> 
+				   <tr> 
+				   <td>收货人</td> 
+				   <td><input type="text" name="consignee" maxlength=""/></td> 
+				   </tr> 
+				   <tr> 
+				   <td>手机号码</td> 
+				   <td><input type="text" name="mobile" maxlength=""/></td> 
+				   </tr> 
+				   <tr> 
+				   <td>省份</td> 
+				   <td><input type="text" name="province" value="" maxlength="40" size="40"/></td> 
+				   </tr> 
+				   <tr> 
+				   <td>市</td> 
+				   <td><input type="text" name="city" value="" maxlength="20" size="40"/></td> 
+				   </tr> 
+				   <tr> 
+				   <td>区</td> 
+				   <td><input type="text" name="district" value="" maxlength="20" size="40"/></td> 
+				   </tr> 
+				   <tr> 
+				   <td>详细地址</td> 
+				   <td><input type="text" name="street" value="" maxlength="10" size="40"/></td> 
+				   </tr> 
+				   <tr> 
+				   <td>Country</td> 
+				   <td><input type="text" name="ship_country" value="" maxlength="20" size="40"/></td> 
+				   </tr> 
+				 </tbody>
+				 
+				 <tfoot>
+					<tr>
+						<div class="button-div">
+			        <input type="submit" value=" 确定 ">
+			        <input type="reset" value=" 重置 ">
+			      </div>
+					</tr>
+				</tfoot>
+			</table>
+			 </form>
+			<!-- 购物车列表 End -->
+		</div>
+		<!-- 购物车有商品 end -->
+
+	</div>
+	<!-- 购物车 Body End -->

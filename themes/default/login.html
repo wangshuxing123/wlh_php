@@ -127,7 +127,7 @@
                     <input type="password" placeholder="请输入您的密码" name="password">
                 </div>
                 <div>
-                    <input type="submit" value="登录" class="btn">
+                    <input type="button" value="登录" class="btn" id="loading">
                 </div>
                  <div>
                     <input type="button" onclick="location.href='<?php echo site_url('user/register');?>'"  value="注册" class="btn">
@@ -138,17 +138,24 @@
     <script src="<?php echo base_url('themes/default/js/zepto.min.js');?>" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript">
         var frm = $('#contactForm');
-        frm.submit(function (ev) {
+        $('#loading').click(function (ev){
             $.ajax({
                 type: frm.attr('method'),
                 url: frm.attr('action'),
                 data: frm.serialize(),
                 success: function (data) {
+<<<<<<< HEAD
                 var mes=JSON.parse(data}
                     alert(mes.message);
                 },
                 error:function () {
                     alert('系统异常！')
+=======
+
+                },
+                error:function (data) {
+                    alert(data.message);
+>>>>>>> bc8e2fe4b0a3fb91d1aa56796a8739460dfff193
                 }
             });
             ev.preventDefault();

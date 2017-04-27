@@ -1,0 +1,45 @@
+
+ <link rel="stylesheet" href="<?php echo base_url('themes/default/css/shop_home.css');?>" type="text/css" />
+	<!-- Body -wll-2013/03/24 -->
+	<div class="shop_bd clearfix">
+            <!-- 第一块区域  -->
+            <div class="shop_bd_top clearfix">
+                <div class="shop_bd_top_left"></div>
+                <div class="shop_bd_top_center">
+             
+            <!-- 第二块区域 -->
+		            <div class="shop_bd_2 clearfix">
+		                <!-- 特别推荐 -->
+		                <div class="shop_bd_tuijian">
+		                    <ul class="tuijian_tabs">
+		                        <li class="hover"  onmouseover="easytabs('1', '1');" onfocus="easytabs('1', '1');" onclick="return false;" id="tuijian_content_btn_1"><a href="javascript:void(0);">特别推荐</a></li>
+		                        <li onmouseover="easytabs('1', '3');" onfocus="easytabs('1', '3');" onclick="return false;" id="tuijian_content_btn_3"><a href="javascript:void(0);">新品上架</a></li>
+		                    </ul>
+		                    <div class="tuijian_content">
+		                        <div id="tuijian_content_1" class="tuijian_shangpin" style="display: block;">
+		                            <ul>
+						<?php foreach($best_goods as $v) : ?>
+		                                <li>
+		                                    <dl>
+		                                        <dt><a href="<?php echo site_url('goods/index').'/'.$v['goods_id'];?>"><img height="150" width="200" src="<?php echo base_url('public/uploads').'/'.$v['goods_thumb'];?>" /></a></dt>
+		                                        <dd><a href="<?php echo site_url('goods/index').'/'.$v['goods_id'];?>"><?php echo $v['goods_name'];?></a></dd>
+		                                        <dd> 商城价：<em><?php echo $v['shop_price'];?></em>元</dd>
+		                                    </dl>
+		                                </li>
+		                            <?php endforeach;?>
+		                       
+		                            </ul>
+		                        </div>
+		                        
+		                        
+		                        
+		                    </div>
+
+		                </div>
+		              
+		            </div>
+            <div class="clear"></div>
+            <!-- 第二块区域 End -->
+            
+	</div>
+	<!-- Body End -->
