@@ -44,11 +44,7 @@ $this -> output -> enable_profiler(TRUE);
 			}
 			
 		}
-		
-
-	}
-
-
+    }
 	#登录动作
 	public function signin(){
 		#验证 省略
@@ -61,7 +57,9 @@ $this -> output -> enable_profiler(TRUE);
 			redirect('home/index');
 		} else {
 			# error
-			echo 'error';
+            $data['message']='erro';
+//			var_dump($data);
+			echo json_encode($data);
 		}
 		
 	}

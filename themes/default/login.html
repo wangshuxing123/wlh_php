@@ -144,10 +144,11 @@
                 url: frm.attr('action'),
                 data: frm.serialize(),
                 success: function (data) {
-                    alert('ok');
+                var mes=JSON.parse(data}
+                    alert(mes.message);
                 },
                 error:function () {
-                    alert('您输入的密码不正确！')
+                    alert('系统异常！')
                 }
             });
             ev.preventDefault();
