@@ -10,13 +10,10 @@ class Order extends Home_Controller{
 		$this->load->model('goods_model');
 	}
 
-	#用户订单
-	public function show_order(){
+	#从购物车>购买
+	public function cart_order(){
              var_dump(APP_ID);
 		$this -> output -> enable_profiler(TRUE);
-		$orderno = date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
-		var_dump($orderno);
-                var_dump(time());
 		#获取购物车数据
 		$user = $this->session->userdata('user');
 		

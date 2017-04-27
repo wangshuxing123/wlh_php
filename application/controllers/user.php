@@ -57,7 +57,7 @@ $this -> output -> enable_profiler(TRUE);
 			redirect('home/index');
 		} else {
 			# error
-            $data['message']='erro';
+            $data['message']='登陆失败！';
 //			var_dump($data);
 			echo json_encode($data);
 		}

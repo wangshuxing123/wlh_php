@@ -11,8 +11,7 @@ class Cart extends Home_Controller{
 
 	#显示购物车页面
 	public function show(){
-
-$this -> output -> enable_profiler(TRUE);
+//      $this -> output -> enable_profiler(TRUE);
 		#获取购物车数据
 		$data['carts'] = $this->cart->contents();
 		$this->load->view('flow.html',$data);

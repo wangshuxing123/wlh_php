@@ -37,8 +37,8 @@
     <meta name="nightmode" content="enable/disable">
     <meta name="imagemode" content="force">
     <meta name="format-detection" content="telephone=no,email=no">
-    <link rel="stylesheet" href="css/public.css">
-    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/public.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/common.css');?>">
     <script>
         (function(){
             function change(){
@@ -57,13 +57,17 @@
             <a></a>
         </div>
         <div class="banner">
-            <img src="img/1.jpg" alt="">
+            <img src="<?php echo base_url('public/uploads/').'/'.$goods['goods_thumb'];?>" alt="">
         </div>
         <div class="messList">
             <ul>
-                <li><span>￥</span><span>179.00</span></li>
-                <li><p>金立手机</p></li>
-                <li><p>数量：</p></li>
+                <li><span>￥</span><span><?php echo $goods['shop_price'];?></span></li>
+                <li><p><?php echo $goods['goods_name'];?></p></li>
+                <li><p>数量：<?php echo $goods['goods_number'];?></p></li>
+                <li>
+                    <label>购买数量：</label>
+                    <span><a class="good_num_jian" id="good_num_jian" href="javascript:void(0);"></a><input type="text" name="goods_nums" value="1" id="good_nums" class="good_nums" /><a href="javascript:void(0);" id="good_num_jia" class="good_num_jia"></a></span>
+                </li>
             </ul>
         </div>
         <div class="buycar">

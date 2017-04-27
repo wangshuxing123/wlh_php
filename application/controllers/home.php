@@ -12,13 +12,13 @@ class Home extends Home_Controller{
 		$this -> output -> enable_profiler(TRUE);
 		$user = $this->session->userdata('user');
 		
-		if (empty($user)){
-			$this->load->view('login.html');
-			}
-		else{
+//		if (empty($user)){
+//			$this->load->view('login.html');
+//			}
+//		else{
 			$data['cates'] = $this->category_model->front_cate();
 			$data['best_goods'] = $this->goods_model->best_goods();
 			$this->load->view('list.html',$data);
-	}
+//	}
 	}
 }
