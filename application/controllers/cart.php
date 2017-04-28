@@ -6,7 +6,7 @@ class Cart extends Home_Controller{
 
 	public function __construct(){
 		parent::__construct();
-		// $this->load->library('cart');
+        $this->load->driver('cache', array('adapter' => 'file'));
 	}
 
 	#显示购物车页面
@@ -35,7 +35,6 @@ class Cart extends Home_Controller{
 
 		if ($this->cart->insert($data)) {
 			# ok
-			// echo 'ok';
 			redirect('cart/show');
 		} else {
 			# error
