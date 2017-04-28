@@ -8,6 +8,7 @@ class Order extends Home_Controller{
 		parent::__construct();
 		$this->load->model('address_model');
 		$this->load->model('goods_model');
+        $this->load->driver('cache', array('adapter' => 'file'));
 	}
 
 	#从购物车>购买
@@ -52,11 +53,12 @@ class Order extends Home_Controller{
             //获取提交商品信息
             $data['id'] = $this->input->post('goods_id');
             $data['name'] = $this->input->post('goods_name');
-            $data['qty'] = $this->input->post('goods_nums');
-            $data['price'] = $this->input->post('shop_price');
+            $data['qty'] = 2;//wll$this->input->post('goods_nums');
+            $data['price'] = 12.2;//$this->input->post('shop_price');
+            $data['totalAmount']=floatval($data['price'])*intval($data['qty']);
 
-            $data['carts'] = $this->cart->contents();
-
+            $this->cache->save("order_confirm_goods_".$user['user_id'], $data);
+            var_dump( $this->cache->get("order_confirm_goods_".$user['user_id']));
             $this->load->view('order.html',$data);
         }
 
@@ -76,6 +78,8 @@ class Order extends Home_Controller{
         $goods_amount=($this->cart->total());
         $order_amount=($this->cart->total());
         var_dump($this->cart->total());
+
+        $goodslist = json_decode($this->cache->get('order_confirm_goods_'.$user_id));
         
         // 生成16位唯一订单编号
         $order_sn= date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
