@@ -34,7 +34,33 @@ class Order extends Home_Controller{
 			}
 		
 	}
-	
+    #从购物车>购买
+    public function buy_now(){
+        $this -> output -> enable_profiler(TRUE);
+        //未登陆不可直接购买
+        $user = $this->session->userdata('user');
+        if (empty($user)){
+            $this->load->view('login.html');
+        }
+        else{
+            //获取收货地址
+            $num=$this->address_model->get_mainNum($user['user_id']);
+            if($num==1)
+                $data['address'] = $this->address_model->get_mainAddress($user['user_id']);
+            else
+                $data['address'] = $this->address_model->get_firstAddress($user['user_id']);
+            //获取提交商品信息
+            $data['id'] = $this->input->post('goods_id');
+            $data['name'] = $this->input->post('goods_name');
+            $data['qty'] = $this->input->post('goods_nums');
+            $data['price'] = $this->input->post('shop_price');
+
+            $data['carts'] = $this->cart->contents();
+
+            $this->load->view('order.html',$data);
+        }
+
+    }
 	public function submit_order(){
 		 		$user = $this->session->userdata('user');
         $user_id = strval($user['user_id']);
@@ -86,19 +112,19 @@ class Order extends Home_Controller{
 	//获取固定状态的订单
 	public function get_orders($stats){
 		$this -> output -> enable_profiler(TRUE);
-		 //var_dump($stats);
 		 $user = $this->session->userdata('user');
-     $user_id = strval($user['user_id']);
-      //var_dump($user);
-      if($stats=='ALL')
-      	 $orders_query = $this->db->query('select *from ci_order where  user_id=?', array($user_id));
-      else
-			   $orders_query = $this->db->query('select *from ci_order where order_status=? and user_id=?', array($stats,$user_id));
-		 
-  	 $orders = $orders_query->result_array();
-  	 // var_dump($orders);
-  	 echo json_encode($orders);
-  	 //$this->load->view('index.html',$orders);
+         $user_id = strval($user['user_id']);
+        if (empty($user)){
+            $this->load->view('login.html');
+        }
+        else {
+            if ($stats == 'ALL')
+                $orders_query = $this->db->query('select *from ci_order where  user_id=?', array($user_id));
+            else
+                $orders_query = $this->db->query('select *from ci_order where order_status=? and user_id=?', array($stats, $user_id));
+            $orders = $orders_query->result_array();
+            echo json_encode($orders);
+        }
 	}
 	
 		//获取订单下商品

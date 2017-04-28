@@ -54,19 +54,20 @@ $this -> output -> enable_profiler(TRUE);
 		if ($user = $this->user_model->get_user($username,$password)) {
 			#成功，将用户信息保存至session
 			$this->session->set_userdata('user',$user);
-			redirect('home/index');
+            $data['success']=1;
+            $data['msg']='/';
 		} else {
 			# error
-            $data['message']='登陆失败！';
-//			var_dump($data);
-			echo json_encode($data);
+            $data['success']=-1;
+            $data['msg']='登陆失败！';
 		}
+        echo json_encode($data);
 		
 	}
 
 	#注销动作
 	public function logout(){
 		$this->session->unset_userdata('user');
-		redirect('home/index');
+		redirect('user/login');
 	}
 }

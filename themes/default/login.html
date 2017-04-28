@@ -143,19 +143,17 @@
                 type: frm.attr('method'),
                 url: frm.attr('action'),
                 data: frm.serialize(),
-                success: function (data) {
-<<<<<<< HEAD
-                var mes=JSON.parse(data}
-                    alert(mes.message);
+                success: function (jd) {
+                    jd=JSON.parse(jd);
+                    if(jd.success == 1){ //成功
+                        location.href=jd.msg;
+                    }else if(jd.success == -1){  //失败
+                       alert(jd.msg);
+                    }
                 },
                 error:function () {
                     alert('系统异常！')
-=======
 
-                },
-                error:function (data) {
-                    alert(data.message);
->>>>>>> bc8e2fe4b0a3fb91d1aa56796a8739460dfff193
                 }
             });
             ev.preventDefault();
