@@ -46,17 +46,19 @@ class Order extends Home_Controller{
         else{
             //获取收货地址
             $num=$this->address_model->get_mainNum($user['user_id']);
-            if($num==1)
-                $data['address'] = $this->address_model->get_mainAddress($user['user_id']);
-            else
-                $data['address'] = $this->address_model->get_firstAddress($user['user_id']);
+//            if($num==1)
+//                $data['address'] = $this->address_model->get_mainAddress($user['user_id']);
+//            else
+//                $data['address'] = $this->address_model->get_firstAddress($user['user_id']);
             //获取提交商品信息
-            $data['id'] = $this->input->post('goods_id');
-            $data['name'] = $this->input->post('goods_name');
-            $data['qty'] = 2;//wll$this->input->post('goods_nums');
-            $data['price'] = 12.2;//$this->input->post('shop_price');
-            $data['totalAmount']=floatval($data['price'])*intval($data['qty']);
-
+            $good['id'] = $this->input->post('goods_id');
+            $good['name'] = $this->input->post('goods_name');
+            $good['qty'] = 2;//wll$this->input->post('goods_nums');
+            $good['price'] = 12.2;//$this->input->post('shop_price');
+            $arr= array();
+            array_push($arr,$good);
+            $data['goods']=$arr;
+            $data['totalAmount']=floatval($good['price'])*intval($good['qty']);
             $this->cache->save("order_confirm_goods_".$user['user_id'], $data);
             var_dump( $this->cache->get("order_confirm_goods_".$user['user_id']));
             $this->load->view('order.html',$data);

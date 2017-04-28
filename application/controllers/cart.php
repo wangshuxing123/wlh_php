@@ -16,7 +16,7 @@ class Cart extends Home_Controller{
 		$data['carts'] = $this->cart->contents();
 		$this->load->view('flow.html',$data);
 	}
-
+    //添加购物车
 	public function add(){
 		#获取表单数据
 		$data['id'] = $this->input->post('goods_id');
@@ -42,6 +42,17 @@ class Cart extends Home_Controller{
 		}
 		
 	}
+    //确定购物车所选商品-->cache,此处与立即购买会共用一个key，相互覆盖
+    public function confirm(){
+        #获取表单数据
+        $cartids ='1,2,3,4';// $this->input->post('cartids');
+        $cartarr=explode(',',$cartids);
+        var_dump($cartarr);
+        foreach ($cartarr as $v){
+           $good= $this->cart->get_item($v);
+
+        }
+    }
 
 	#删除购物车信息
 	public function delete($rowid){
