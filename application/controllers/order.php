@@ -23,19 +23,17 @@ class Order extends Home_Controller{
 			}
 		else{
 			$num=$this->address_model->get_mainNum($user['user_id']);
-
 			if($num==1)
 				$data['address'] = $this->address_model->get_mainAddress($user['user_id']);
 			else
 				$data['address'] = $this->address_model->get_firstAddress($user['user_id']);
-			
 			$data['carts'] = $this->cart->contents();
 
 			$this->load->view('order.html',$data);
 			}
 		
 	}
-    #从购物车>购买
+    #直接购买
     public function buy_now(){
         $this -> output -> enable_profiler(TRUE);
         //未登陆不可直接购买
@@ -55,6 +53,7 @@ class Order extends Home_Controller{
             $good['name'] = $this->input->post('goods_name');
             $good['qty'] = 2;//wll$this->input->post('goods_nums');
             $good['price'] = 12.2;//$this->input->post('shop_price');
+            $good['subtotal'] = floatval($good['price'])*intval($good['qty']);
             $arr= array();
             array_push($arr,$good);
             $data['goods']=$arr;
@@ -66,7 +65,7 @@ class Order extends Home_Controller{
 
     }
 	public function submit_order(){
-		 		$user = $this->session->userdata('user');
+        $user = $this->session->userdata('user');
         $user_id = strval($user['user_id']);
 
         $address_id = intval(11);//$this->input->post('addressid')
@@ -75,27 +74,22 @@ class Order extends Home_Controller{
         $shipping_id=1;
         $pay_id=1;
         $order_time=time();
-        //先遍历购物车内的金额和商品，后续可以考虑将用户从购物车选择的物品放到redis
-        $carts= $this->cart->contents();
-        $goods_amount=($this->cart->total());
-        $order_amount=($this->cart->total());
-        var_dump($this->cart->total());
 
-        $goodslist = json_decode($this->cache->get('order_confirm_goods_'.$user_id));
-        
         // 生成16位唯一订单编号
         $order_sn= date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
-				
+        $goodslist = $this->cache->get('order_confirm_goods_'.$user_id);
+        var_dump('wsx:'.json_encode($goodslist));
+        var_dump($goodslist['totalAmount']);
         $this->db->trans_start();
-        $this->db->query('INSERT INTO ci_order (order_sn, user_id, address_id, order_status, postscripts, shipping_id, pay_id, goods_amount, order_amount, order_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($order_sn,$user_id,$address_id,$order_status,$postscripts,$shipping_id,$pay_id,$goods_amount,$order_amount,$order_time));
- 				        
-        foreach($carts as $cart)
+        $this->db->query('INSERT INTO ci_order (order_sn, user_id, address_id, order_status, postscripts, shipping_id, pay_id, goods_amount, order_amount, order_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($order_sn,$user_id,$address_id,$order_status,$postscripts,$shipping_id,$pay_id,$goodslist['totalAmount'],$goodslist['totalAmount'],$order_time));
+        //遍历缓存中用户确认的商品
+        foreach($goodslist['goods'] as $cart)
         {
         	$goods_attr='werw';
         	$goods_id=$cart['id'];
         	$good=$this->goods_model->get_goods($goods_id);
         	var_dump($good['goods_img']);
-        	$this->db->query('INSERT INTO ci_order_goods (order_sn, goods_id, goods_name, goods_img, shop_price, goods_price, goods_number, goods_attr, subtotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)', array($order_sn,$cart['id'],$cart['name'],$good['goods_img'],$cart['price'],$cart['price'],$cart['qty'],$goods_attr,$cart['subtotal']));
+        	$this->db->query('INSERT INTO ci_order_goods (order_sn, goods_id, goods_name, goods_img, shop_price, goods_price, goods_number, goods_attr, subtotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)', array($order_sn,$good['goods_id'],$good['goods_name'],$good['goods_img'],$cart['price'],$cart['price'],$cart['qty'],$goods_attr,$cart['subtotal']));
  
  					//从购物车删除此id
  				  //$data['rowid'] = $cart['rowid'];

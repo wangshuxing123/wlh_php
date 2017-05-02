@@ -1,0 +1,28 @@
+
+购物车：
+1.加入购物车：cart/add
+接收参数：goods_id，goods_name，goods_nums，shop_price
+返回：成功(show),失败
+
+2.显示购物车列表：cart/show
+接收参数：无
+返回：购物车json：$this->cart->contents();
+
+3.选择购物车物品，结算：cart/confirm
+接收参数：cartids  (商品id,逗号分隔)
+返回：order.html页面+地址信息+购物车选中商品
+
+订单：
+1.直接购买：order/buy_now
+前置条件：需要登录（同购物车3）
+接收参数：goods_id，goods_name，goods_nums，shop_price（同购物车3）
+返回：order.html页面+地址信息+购物车选中商品（同购物车3）
+
+2.确认订单:order/submit_order
+前置条件：需要登录，
+前置流程：直接购买/购物车结算
+接收参数：addressid，postscripts，shipping_id，pay_id
+返回：成功($order_sn)/失败
+3.查询状态的订单：order/get_orders/1
+接收参数：stats（订单状态 1 待付款 2 待发货 3 已发货 4 已完成 5.ALL）
+返回：订单list
