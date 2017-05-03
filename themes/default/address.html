@@ -10,8 +10,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>新增地址</title>
-    <link rel="stylesheet" href="css/public.css">
-    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/public.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/common.css');?>">
     <script src="js/zepto.min.js"></script>
     <script>
         (function(){
@@ -42,15 +42,24 @@
                 </li>
                 <li>
                     <span>省/直辖市</span>
-                    <input type="text" placeholder="省/直辖市" name="region">
+                    <select class="weui_select" name="province">
+                        <option selected="" value="">省/直辖市</option>
+                        <?php foreach($province as $v) :?>
+                        <option value="<?php echo $v['region_id'];?>"><?php echo $v['region_name'];?></option>
+                        <?php endforeach;?>
+                    </select>
                 </li>
                 <li>
                     <span>市</span>
-                    <input type="text" placeholder="市">
+                    <select class="weui_select" name="city">
+                        <option selected="" value="">市</option>
+                    </select>
                 </li>
                 <li>
                     <span>区县</span>
-                    <input type="text" placeholder="区县">
+                    <select class="weui_select" name="region">
+                        <option selected="" value="">区县</option>
+                    </select>
                 </li>
                 <li>
                     <span>详细地址</span>
@@ -62,52 +71,102 @@
     <div>
         <button class="confirmBtn save">保存</button>
     </div>
+    <script src="<?php echo base_url('themes/default/js/zepto.min.js');?>" type="text/javascript" charset="utf-8"></script>
     <script>
-        var saveflag = false;
-        $('.save').on('click', function(){
-            if(saveflag){
-                return;
-            }
-//            var addressid = $('input[name="addressid"]').val();
-            var acceptname = $.trim($('input[name="acceptname"]').val());
-            if(acceptname == ''){
-                alert('请输入收货人姓名！');
-                return;
-            }
-
-            var regionid = $('select[name="region"]').val();
-            if(regionid === ''){
-                alert('请输入地址区域！');
-                return;
-            }
-
-            var addr = $.trim($('textarea[name="addr"]').val());
-            if(addr == ''){
-                alert('请输入详细地址信息！');
-                return;
-            }
-            var mobile = $.trim($('input[name="mobile"]').val());
-            if(!$.validator(mobile, 'req') ||!$.validator(mobile, 'phone')){
-                alert('请输入正确格式的11位手机号！');
-                return;
-            }
-            saveflag = true;
-            $.post('/profile/save_address', $('#mainForm').serialize(), function(jd){
-                {redirecturl url='home/signin'}
-                if(jd.success){
-                    alert('保存成功');
-                    var from = $('#from').val();
-                    if(from == ''){
-                        location.href = '/profile/address';
-                    }else{
-                        location.href = '/order/confirm';
-                    }
-                }else{
-                    alert(jd.msg);
-                    saveflag = false;
+        $(function(){
+            var saveflag = false;
+            $('.save').on('click', function(){
+                if(saveflag){
+                    return;
                 }
-            }, 'json');
+    //            var addressid = $('input[name="addressid"]').val();
+                var acceptname = $.trim($('input[name="acceptname"]').val());
+                if(acceptname == ''){
+                    alert('请输入收货人姓名！');
+                    return;
+                }
 
+                var regionid = $('select[name="province"]').val();
+                if(regionid === ''){
+                    alert('请输入地址区域！');
+                    return;
+                }
+
+                var addr = $.trim($('input[name="addr"]').val());
+                if(addr == ''){
+                    alert('请输入详细地址信息！');
+                    return;
+                }
+                var mobile = $.trim($('input[name="mobile"]').val());
+                if(!$.validator(mobile, 'req') ||!$.validator(mobile, 'phone')){
+                    alert('请输入正确格式的11位手机号！');
+                    return;
+                }
+                saveflag = true;
+                $.post("<?php echo site_url('/address/create_address');?>", $('#mainForm').serialize(), function(jd){
+                    if(jd.success){
+                        alert('保存成功');
+                        var from = $('#from').val();
+                        if(from == ''){
+                            location.href = '/profile/address';
+                        }else{
+                            location.href = '/order/confirm';
+                        }
+                    }else{
+                        alert(jd.msg);
+                        saveflag = false;
+                    }
+                }, 'json');
+            });
+
+            // 省份变化 加载市
+            $('select[name="province"]').on('change', function(){
+                var provinceid = $(this).val();
+                if(provinceid == ''){
+                    $('select[name="city"]').html('<option value="" selected>市</option>');
+                    $('select[name="city"]').trigger('change');
+                    return;
+                }
+                $.post("<?php echo site_url('/address/find_citys_by_province');?>", { provinceid:provinceid}, function(jd){
+                    if(jd.success){
+                        var strHtml = '';
+                        for(var i=0;i<jd.data.length;i++){
+                            if(i == 0){
+                                strHtml += '<option value="'+ jd.data[i].id+'" selected="selected">'+ jd.data[i].name+'</option>';
+                            }else{
+                                strHtml += '<option value="'+ jd.data[i].id+'">'+ jd.data[i].name+'</option>';
+                            }
+                        }
+                        $('select[name="city"]').html(strHtml);
+
+                        $('select[name="city"]').trigger('change');
+                    }
+                }, 'json');
+            });
+            // 城市变化 加载区县
+            $('select[name="city"]').on('change', function(){
+                var provinceid = $(this).val();
+                if(provinceid == ''){
+                    $('select[name="region"]').html('<option value="" selected>区/县</option>');
+                    $('select[name="region"]').trigger('change');
+                    return;
+                }
+                $.post("<?php echo site_url('/address/find_citys_by_province');?>", { provinceid:provinceid}, function(jd){
+                    if(jd.success){
+                        var strHtml = '';
+                        for(var i=0;i<jd.data.length;i++){
+                            if(i == 0){
+                                strHtml += '<option value="'+ jd.data[i].id+'" selected="selected">'+ jd.data[i].name+'</option>';
+                            }else{
+                                strHtml += '<option value="'+ jd.data[i].id+'">'+ jd.data[i].name+'</option>';
+                            }
+                        }
+                        $('select[name="region"]').html(strHtml);
+
+                        $('select[name="region"]').trigger('change');
+                    }
+                }, 'json');
+            });
         });
     </script>
 </body>
