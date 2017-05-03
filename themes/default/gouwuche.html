@@ -65,9 +65,9 @@
 
     <div id="goodList" class="goodList">
         <?php foreach($carts as $cart) :?>
-        <div class="clearfix">
+        <div class="clearfix" style="border-bottom: 1px solid #cccccc;">
             <div >
-                <img class="check selected" src="<?php echo base_url('themes/default/icon/cart_checked.jpg');?>" alt="" cartid="<?php echo $cart['id'];?>" style="width:20px; height:20px;margin-right:15px;display:block;">
+                <img class="check selected" src="<?php echo base_url('themes/default/icon/cart_checked.jpg');?>" alt="" cartid="<?php echo $cart['id'];?>" style="width:20px; height:20px;margin:2.2rem 15px 0 15px;display:block; background: none;">
             </div>
             <a href="<?php echo site_url('goods/index').'/'.$cart['id'] ;?>">
             <img height="100" width="140" class="" src="<?php echo base_url('public/uploads/shihua.jpg');?>" alt="">
@@ -82,13 +82,14 @@
         </div>
         <?php endforeach;?>
     </div>
-    <?php endif;?>
     <div class="footerdiv">
         <a class="checkall selected" href="javascript:void(0);">全选</a>
 
         <a href="javascript:;" class="tobuy">去结算</a>
         <span class="sumdiv">总计：<label class="payablemoney" style="color:#e7011f;font-weight: bold;">0.00</label></span>
     </div>
+    <?php endif;?>
+
 
     <div class="footnav">
         <ul>

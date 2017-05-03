@@ -194,6 +194,7 @@
     left:0;
     bottom: 2rem;
     width: 16rem;
+    border-top: 1px solid #cccccc;
 }
 .checkall{
     display: inline-block;
@@ -204,7 +205,7 @@
     background: url(../icon/cart_uncheck.jpg) no-repeat 0 14px;
 }
 .selected{
-     background: url(../icon/cart_checked.jpg) no-repeat 0 14px;
+    background: url(../icon/cart_checked.jpg) no-repeat 0 14px;
  }
 .sumdiv{
     float: right;
