@@ -162,8 +162,29 @@
 .listbox li.active{
     color: #dc4945;
 }
-
-
+.goodList{
+    background: #f9f9f9;
+}
+.goodList img{
+    padding: 5px 0;
+    float: left;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-left: 30px;
+}
+.goodList .goodsName{
+    float: left;
+    font-size: 16px;
+    margin: 1rem;
+}
+.goodsChoose{
+    float: left;
+    font-size: 0.75rem;
+}
+.goodsChoose p{
+    color: #cc3300;
+    margin: 0.5rem;
+}
 
 
 
