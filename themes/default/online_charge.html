@@ -9,9 +9,11 @@
     <meta content="black" name="apple-mobile-web-app-status-bar-style">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>新增地址</title>
+    <title>在线支付</title>
     <link rel="stylesheet" href="css/public.css">
     <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="lib/weui.css">
+    <link rel="stylesheet" href="lib/jquery-weui.min.css">
     <script src="js/zepto.min.js"></script>
     <script>
         (function(){
@@ -26,88 +28,50 @@
 </head>
 <body>
     <div class="header">
-        <span>新增地址</span>
+        <span>在线支付</span>
         <a></a>
     </div>
-    <div class="plusAddress">
-        <form id="mainForm">
-            <ul>
-                <li>
-                    <span>收货人</span>
-                    <input type="text" placeholder="姓名" name="acceptname">
-                </li>
-                <li>
-                    <span>手机号</span>
-                    <input type="text" placeholder="11位手机号" name="mobile">
-                </li>
-                <li>
-                    <span>省/直辖市</span>
-                    <input type="text" placeholder="省/直辖市" name="region">
-                </li>
-                <li>
-                    <span>市</span>
-                    <input type="text" placeholder="市">
-                </li>
-                <li>
-                    <span>区县</span>
-                    <input type="text" placeholder="区县">
-                </li>
-                <li>
-                    <span>详细地址</span>
-                    <input type="text" placeholder="详细地址" name="addr">
-                </li>
-            </ul>
-        </form>
-    </div>
-    <div>
-        <button class="confirmBtn save">保存</button>
+    <div class="weui-msg">
+        <div class="weui-icon-area" style="margin-bottom: 20px;"><i class="weui-icon-success weui-icon_msg" style="color: #e60012;"></i></div>
+        <div class="weui-text-area">
+            <h2 class="weui-msg-title">订单提交成功,请尽快支付！</h2>
+            <p class="weui-msg-desc">订单编号：</p>
+            <p class="weui-msg-desc">支付金额：<span style="color: #e60012;font-weight: bold;">6666</span></p>
+        </div>
+        <div class="weui-opr-area">
+            <p class="weui-btn-area">
+                <a href="javascript:;" class="weui-btn weui-btn-primary topay" orderid="{$order->id}" orderno="{$order->orderno}" amount="{$order->realamount}" style="background-color: #e60012;">微信安全支付</a>
+            </p>
+        </div>
     </div>
     <script>
-        var saveflag = false;
-        $('.save').on('click', function(){
-            if(saveflag){
-                return;
-            }
-//            var addressid = $('input[name="addressid"]').val();
-            var acceptname = $.trim($('input[name="acceptname"]').val());
-            if(acceptname == ''){
-                alert('请输入收货人姓名！');
-                return;
-            }
-
-            var regionid = $('select[name="region"]').val();
-            if(regionid === ''){
-                alert('请输入地址区域！');
-                return;
-            }
-
-            var addr = $.trim($('textarea[name="addr"]').val());
-            if(addr == ''){
-                alert('请输入详细地址信息！');
-                return;
-            }
-            var mobile = $.trim($('input[name="mobile"]').val());
-            if(!$.validator(mobile, 'req') ||!$.validator(mobile, 'phone')){
-                alert('请输入正确格式的11位手机号！');
-                return;
-            }
-            saveflag = true;
-            $.post('/profile/save_address', $('#mainForm').serialize(), function(jd){
-                {redirecturl url='home/signin'}
+        $('.topay').on('click', function(){
+            var orderid = $(this).attr('orderid');
+            var orderno = $(this).attr('orderno');
+            var amount = $(this).attr('amount');
+            $.post('/order/to_pay', { orderid:orderid,orderno:orderno,amount:amount }, function(jd){
                 if(jd.success){
-                    alert('保存成功');
-                    var from = $('#from').val();
-                    if(from == ''){
-                        location.href = '/profile/address';
-                    }else{
-                        location.href = '/order/confirm';
-                    }
+                    wx.chooseWXPay({
+                        appId: jd.data.appId,
+                        timestamp: jd.data.timeStamp,
+                        nonceStr: jd.data.nonceStr,
+                        package: jd.data.package,
+                        signType: jd.data.signType,
+                        paySign: jd.data.paySign,
+                        success: function (res) {
+                            location.href="/order/" + jd.data.orderid;
+                        },
+                        fail: function (res) {
+                            alert('支付失败，请重试！');
+                        },
+                        cancel: function(){
+                            alert('微信支付已取消！');
+                        }
+                    });
                 }else{
-                    alert(jd.msg);
-                    saveflag = false;
+
                 }
             }, 'json');
-
         });
     </script>
 </body>
