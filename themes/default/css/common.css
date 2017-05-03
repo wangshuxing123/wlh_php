@@ -227,8 +227,70 @@
      color: #9c9c9c;
      cursor: not-allowed;
  }
-
-
+.address{
+    padding: 1rem 0;
+    background: #efefef;
+}
+.address input{
+    width: 16rem;
+    padding-left: 1rem;
+    box-sizing: border-box;
+    height: 30px;
+    border: none;
+}
+.libox{
+    padding:10px 0px 10px 20px;
+    border-bottom: 1px solid #cccccc;
+}
+.libox img{
+    width: 3rem;
+    height:3rem;
+    float: left;
+}
+.libox span{
+    float: left;
+    margin: 1rem 30px;
+}
+.libox div{
+    float: right;
+    text-align: right;
+    padding-right: 20px;
+}
+.libox div .p1{
+    font-size: 16px;
+}
+.libox div .p2{
+    color: #666666;
+    margin: 10px;
+    margin-right: 0;
+}
+.priceBox{
+    border-bottom: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
+    margin-bottom: 20px;
+}
+.priceBox li{
+    height:28px;
+    line-height: 28px;
+    padding: 0 20px;
+}
+.priceBox .ul1{
+    float: left;
+}
+.priceBox .ul2{
+    float: right;
+    text-align: right;
+}
+.confirmBtn{
+    width: 12rem;
+    height:30px;
+    border: none;
+    border-radius: 5px;
+    background: red;
+    color: #ffffff;
+    margin: 0 auto;
+    display: block;
+}
 
 
 

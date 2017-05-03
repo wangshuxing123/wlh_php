@@ -146,13 +146,11 @@
                         cartids += ','+cartid;
                     }
                 });
-                console.log(cartids)
                 $.post("<?php echo site_url('cart/confirm');?>", { cartids:cartids}, function(jd){
                     if(jd.success){
                         location.href = jd.msg;
                     }
                 }, 'json');
-
             });
         });
         /**
