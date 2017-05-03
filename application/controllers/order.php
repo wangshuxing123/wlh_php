@@ -1,4 +1,4 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php date_default_timezone_set("PRC");
 
 
 //购物车控制器
@@ -13,7 +13,6 @@ class Order extends Home_Controller{
 
 	#从购物车>购买
 	public function cart_order(){
-		$this -> output -> enable_profiler(TRUE);
 		#获取购物车数据
 		$user = $this->session->userdata('user');
 		
@@ -64,11 +63,12 @@ class Order extends Home_Controller{
         }
 
     }
+    //提交订单
 	public function submit_order(){
         $user = $this->session->userdata('user');
         $user_id = strval($user['user_id']);
 
-        $address_id = intval(11);//$this->input->post('addressid')
+        $address_id = $this->input->post('addressid');//intval(11);
         $order_status=intval(1);
         $postscripts=strval('beizhu');//$this->input->post('postscripts')
         $shipping_id=1;
@@ -78,8 +78,6 @@ class Order extends Home_Controller{
         // 生成16位唯一订单编号
         $order_sn= date('Ymd').substr(implode(NULL, array_map('ord', str_split(substr(uniqid(), 7, 13), 1))), 0, 8);
         $goodslist = $this->cache->get('order_confirm_goods_'.$user_id);
-        var_dump('wsx:'.json_encode($goodslist));
-        var_dump($goodslist['totalAmount']);
         $this->db->trans_start();
         $this->db->query('INSERT INTO ci_order (order_sn, user_id, address_id, order_status, postscripts, shipping_id, pay_id, goods_amount, order_amount, order_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array($order_sn,$user_id,$address_id,$order_status,$postscripts,$shipping_id,$pay_id,$goodslist['totalAmount'],$goodslist['totalAmount'],$order_time));
         //遍历缓存中用户确认的商品
@@ -88,7 +86,6 @@ class Order extends Home_Controller{
         	$goods_attr='werw';
         	$goods_id=$cart['id'];
         	$good=$this->goods_model->get_goods($goods_id);
-        	var_dump($good['goods_img']);
         	$this->db->query('INSERT INTO ci_order_goods (order_sn, goods_id, goods_name, goods_img, shop_price, goods_price, goods_number, goods_attr, subtotal) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)', array($order_sn,$good['goods_id'],$good['goods_name'],$good['goods_img'],$cart['price'],$cart['price'],$cart['qty'],$goods_attr,$cart['subtotal']));
  
  					//从购物车删除此id

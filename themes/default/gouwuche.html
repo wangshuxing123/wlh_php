@@ -147,6 +147,7 @@
                     }
                 });
                 $.post("<?php echo site_url('cart/confirm');?>", { cartids:cartids}, function(jd){
+                    console.log(jd.success)
                     if(jd.success){
                         location.href = jd.msg;
                     }
