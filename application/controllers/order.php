@@ -29,7 +29,7 @@ class Order extends Home_Controller{
 
 			$data['carts'] =$this->cache->get("order_confirm_goods_" . $user['user_id']);
             var_dump(json_encode($data));
-			$this->load->view('order.html',$data);
+			$this->load->view('order_confirm.html',$data);
 			}
 		
 	}
@@ -60,7 +60,7 @@ class Order extends Home_Controller{
             $data['totalAmount']=floatval($good['price'])*intval($good['qty']);
             $this->cache->save("order_confirm_goods_".$user['user_id'], $data);
             var_dump( $this->cache->get("order_confirm_goods_".$user['user_id']));
-            $this->load->view('order.html',$data);
+            $this->load->view('order_confirm.html',$data);
         }
 
     }
@@ -97,19 +97,120 @@ class Order extends Home_Controller{
 					//$this->cart->update($data);
         }
         $this->db->trans_complete();
-
-       
         if($this->db->trans_status())
         {
-            echo json_encode(strval($order_sn));
+            $data["success"]=1;
+            $data["data"]=strval($order_sn);
         }
         else
         {
-            echo json_encode('操作失败，请重新提交！');
+            $data["success"]=-1;
+            $data["data"]='操作失败，请重新提交！';
         }
-		
+        echo json_encode($data);
 	}
-	//获取固定状态的订单
+
+    /**
+     * 订单提交成功 马上付款
+     */
+    public function online_charge($id = 0)
+    {
+        $query = $this->db->query('SELECT id, orderno, realamount, status FROM tb_order WHERE order_sn=?', array($id));
+        $data['order']=$query->row();
+        $this->load->view('online_charge.html',$data);
+    }
+    /**
+     * 立即支付
+     */
+    public function to_pay(){
+
+        $user = $this->session->userdata('user');
+        $userid = strval($user['user_id']);
+
+        $openid = get_cookie('aye_openid');
+        $total_fee = $this->input->post('amount');
+        $orderid = $this->input->post('orderid');
+        $orderno = $this->input->post('orderno');
+
+//        if(floatval($total_fee) <= 0){
+//            $total_fee = 1;
+//        }
+
+        if(!empty($userid)){
+            // 微信支付
+            $body = '微商城下单';
+            $notify_url = 'http://wechat.a-ye.cn/entry/wx_pay_success';
+            $data = wx_pay($orderid, $orderno, $body, $notify_url, $total_fee, 'JSAPI', $openid);
+
+            render_success_json($data);
+        }else{
+            $this->smarty->assign('errMsg','登录状态失效，请重新登录！');
+            $this->smarty->view('error.tpl');
+        }
+    }
+
+    /**
+     * 微信支付 接口
+     * @param $out_trade_no
+     * @param $body
+     * @param $notify_url
+     * @param $total_fee
+     * @param string $openid
+     * @return array
+     */
+    function wx_pay($orderid, $out_trade_no, $body, $notify_url, $total_fee, $trade_type, $openid='')
+    {
+        $_CI = &get_instance();
+        $appid = $_CI->wxcpt->get_wx_appid();
+        $mch_id = $_CI->wxcpt->get_wx_mchid();
+
+        $param = array();
+        $param['appid'] = $appid;
+        $param['mch_id'] = $mch_id;  //商户号
+        $param['device_info'] = 'WEB';
+        $param['spbill_create_ip'] = $_SERVER['REMOTE_ADDR'];  //终端ip
+        $param['trade_type'] = $trade_type;
+        $param['product_id'] = $out_trade_no;
+        $param['nonce_str'] = nonce_str();  //随机字符串
+        if ($trade_type != 'NATIVE')
+        {
+            $param['openid'] = $openid;
+        }
+        $param['total_fee'] = $total_fee*100;  //实际金额
+        $param['body'] = $body;
+        $param['out_trade_no'] = $out_trade_no;
+        $param['notify_url'] = $notify_url;
+        $param['attach'] = $orderid;
+        $param['sign'] = signval($param);
+
+        $url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+        $xml = array_to_xml($param);
+        $resultXml = http_post_by_data($xml,$url);
+        $result = xml_to_array($resultXml);
+
+//        log_message('debug', 'pay_result:'.json_encode($result));
+
+        $prepay_id = $result["prepay_id"];
+        $code_url = '';
+        if(array_key_exists('code_url', $result))
+        {
+            $code_url = $result["code_url"];
+        }
+
+        $data = array();
+        $data['appId'] = $appid;
+        $data["timeStamp"] = strval(time());
+        $data["nonceStr"] = nonce_str();
+        $data["package"] = 'prepay_id='.$prepay_id;
+        $data["signType"] = "MD5";
+        $data["paySign"] = signval($data);
+        $data['orderid'] = $orderid;
+        $data['orderno'] = strval($out_trade_no);
+        $data['code_url'] = $code_url;
+
+        return $data;
+    }
+    //获取固定状态的订单
 	public function get_orders($stats){
 		$this -> output -> enable_profiler(TRUE);
 		 $user = $this->session->userdata('user');

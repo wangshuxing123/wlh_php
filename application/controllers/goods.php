@@ -12,6 +12,7 @@ class Goods extends Home_Controller{
 	public function index($goods_id){
 //		$this -> output -> enable_profiler(TRUE);
 		$data['goods'] = $this->goods_model->get_goods($goods_id);
+        $data['carts'] = $this->cart->contents();
 		$this->load->view('goods.html',$data);
 	}
 }

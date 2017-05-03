@@ -80,7 +80,7 @@
             </a>
             <a href="javascript:;" class="addcarnow">加入购物车</a>
             <a href="javascript:;">
-                <p class="car"><span>0</span></p>
+                <p class="car"><a href="<?php echo site_url('cart/show');?>"><span><?php echo $this->cart->total_items();?></span></a></p>
             </a>
         </div>
     </div>
