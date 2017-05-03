@@ -15,8 +15,7 @@ class Cart extends Home_Controller{
 //      $this -> output -> enable_profiler(TRUE);
 		#获取购物车数据
 		$data['carts'] = $this->cart->contents();
-		echo json_encode($data);
-        //$this->load->view('flow.html',$data);
+        $this->load->view('gouwuche.html',$data);
 	}
     //添加购物车
 	public function add(){
@@ -49,18 +48,18 @@ class Cart extends Home_Controller{
     //确定购物车所选商品-->cache,此处与立即购买会共用一个key，相互覆盖
     public function confirm(){
         #获取表单数据 cartid 用购物车中的rowid
-        $cartids ='1,2';// $this->input->post('cartids');
+        $cartids = $this->input->post('cartids');
         $cartarr=explode(',',$cartids);
 //        var_dump($cartarr);
         $user = $this->session->userdata('user');
         if (empty($user)){
-            $this->load->view('login.html');
+           $data['success']=-1;
+           $data['msg']=site_url('user/login');
         }
         else {
             $arr = array();
             $total = 0;
             foreach ($cartarr as $id) {
-                //$good= $this->cart->get_item('c81e728d9d4c2f636f067f89cc14862c');
                 $carts = $this->cart->contents();
                 foreach ($carts as $v) {
                     if ($v['id'] == $id) {
@@ -74,12 +73,14 @@ class Cart extends Home_Controller{
                     }
                 }
             }
-            $data['goods'] = $arr;
-            $data['totalAmount'] = $total;
-            $this->cache->save("order_confirm_goods_" . $user['user_id'], $data);
-            var_dump(json_encode($this->cache->get("order_confirm_goods_" . $user['user_id'])));
-            $this->load->view('order.html',$data);
+            $goods['goods'] = $arr;
+            $goods['totalAmount'] = $total;
+            $this->cache->save("order_confirm_goods_".$user['user_id'], $goods);
+//            var_dump(json_encode($this->cache->get("order_confirm_goods_" . $user['user_id'])));
+            $data['success']=1;
+            $data['msg']=site_url('order/cart_order');
         }
+        echo  json_encode($data);
     }
 
 	#删除购物车信息

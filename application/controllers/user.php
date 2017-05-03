@@ -19,30 +19,34 @@ class User extends Home_Controller{
 	}
 
 	public function do_register(){
-$this -> output -> enable_profiler(TRUE);
+//$this -> output -> enable_profiler(TRUE);
 		#设置验证规则
-		$this->form_validation->set_rules('username','用户名','required');
+		$this->form_validation->set_rules('username','用户名','required', array('required' => '用户名为必填！'));
 		$this->form_validation->set_rules('password','密码','required|min_length[6]|max_length[16]|md5');
 		$this->form_validation->set_rules('repassword','重复密码','required|matches[password]');
 
 
 		if ($this->form_validation->run() == false) {
 			# 未通过
-			echo validation_errors();
+//            var_dump(validation_errors());
+            $data['success']=-1;
+            $data['msg']=validation_errors();
+            echo json_encode($data);
 		} else {
 			# 通过,注册
-			$data['user_name'] = $this->input->post('username',true);
-			$data['password'] = $this->input->post('password',true);
-
-			$data['reg_time'] = time();
-			if ($this->user_model->add_user($data)) {
+			$user['user_name'] = $this->input->post('username',true);
+            $user['password'] = $this->input->post('password',true);
+            $user['reg_time'] = time();
+			if ($this->user_model->add_user($user)) {
 				# 注册成功
-				echo 'ok';
+                $data['success']=1;
+                $data['msg']="注册成功";
 			} else {
 				# 注册失败
-				echo 'error';
+                $data['success']=-1;
+                $data['msg']="注册失败";
 			}
-			
+			echo json_encode($data);
 		}
     }
 	#登录动作

@@ -37,8 +37,8 @@
     <meta name="nightmode" content="enable/disable">
     <meta name="imagemode" content="force">
     <meta name="format-detection" content="telephone=no,email=no">
-    <link rel="stylesheet" href="css/public.css">
-    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/public.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/css/common.css');?>">
     <script>
         (function(){
             function change(){
@@ -55,40 +55,128 @@
         <span>购物车</span>
         <a></a>
     </div>
-    <!--<div class="centerbox" id="boxList">-->
-        <!--<img src="icon/car.png" alt="">-->
-        <!--<p>亲，您的购物车是空的，赶紧购买吧！</p>-->
-        <!--<button>去逛逛</button>-->
-    <!--</div>-->
+    <?php if (empty($carts)) :?>
+        <div class="centerbox" id="boxList">
+            <img src="<?php echo base_url('themes/default/icon/car.png');?>" alt="">
+            <p>亲，您的购物车是空的，赶紧购买吧！</p>
+            <button onclick="window.href='<?php echo site_url('/');?>'">去逛逛</button>
+        </div>
+    <?php else :?>
+
     <div id="goodList" class="goodList">
+        <?php foreach($carts as $cart) :?>
         <div class="clearfix">
-            <img src="img/1.jpg" alt="">
-            <span class="goodsName">加油卡</span>
+            <div >
+                <img class="check selected" src="<?php echo base_url('themes/default/icon/cart_checked.jpg');?>" alt="" cartid="<?php echo $cart['id'];?>" style="width:20px; height:20px;margin-right:15px;display:block;">
+            </div>
+            <a href="<?php echo site_url('goods/index').'/'.$cart['id'] ;?>">
+            <img height="100" width="140" class="" src="<?php echo base_url('public/uploads/shihua.jpg');?>" alt="">
+            </a>
+            <span class="goodsName"><?php echo $cart['name'];?></span>
             <div class="goodsChoose">
-                <p>￥199</p>
-                <p><a href="">删除</a></p>
+                <p>￥<?php echo $cart['price'];?></p>
+                <p>X<?php echo $cart['qty'];?></p>
+                <p class="totalmoney" style="display: none;"><?php echo $cart['subtotal'];?></p>
+                <p><a href="<?php echo site_url('cart/delete').'/'.$cart['rowid'];?>">删除</a></p>
             </div>
         </div>
+        <?php endforeach;?>
     </div>
+    <?php endif;?>
+    <div class="footerdiv">
+        <a class="checkall selected" href="javascript:void(0);">全选</a>
+
+        <a href="javascript:;" class="tobuy">去结算</a>
+        <span class="sumdiv">总计：<label class="payablemoney" style="color:#e7011f;font-weight: bold;">0.00</label></span>
+    </div>
+
     <div class="footnav">
         <ul>
-            <li><a href="javascript:;"><img src="icon/11.png" alt=""><p>首页</p></a></li>
-            <li><a href="javascript:;"><img src="icon/22.png" alt=""><p>订单</p></a></li>
-            <li><a href="javascript:;"><img src="icon/33ac.png" alt=""><p class="active">购物车</p></a></li>
-            <li><a href="javascript:;"><img src="icon/44.png" alt=""><p>会员中心</p></a></li>
+            <li><a href="<?php echo site_url('/');?>"><img src="<?php echo base_url('themes/default/icon/11.png');?>" alt=""><p>首页</p></a></li>
+            <li><a href="<?php echo site_url('order/get_orders/ALL')?>"><img src="<?php echo base_url('themes/default/icon/22.png');?>" alt=""><p>订单</p></a></li>
+            <li><a href="<?php echo site_url('cart/show');?>"><img src="<?php echo base_url('themes/default/icon/33.png');?>" alt=""><p>购物车</p></a></li>
+            <li><a href="javascript:;"><img src="<?php echo base_url('themes/default/icon/44.png');?>" alt=""><p>会员中心</p></a></li>
         </ul>
     </div>
-    <script src="js/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<?php echo base_url('themes/default/js/zepto.min.js');?>" type="text/javascript" charset="utf-8"></script>
     <script>
-        $.post("<?php echo site_url('cart/show');?>", function(cont){
-            if(cont.cart){
-                var $boxList = $('#boxList');
-                for(var i = 0; i<cont.length; i++){
-                    list += '<div><p></p><p></p></div>'
+        $(function(){
+            calcMoney();
+            /**
+             * 单个商品的选择
+             */
+            $('.check').on('click', function(){
+                if ($(this).hasClass('selected')){
+                    $(this).removeClass('selected').attr('src', "<?php echo base_url('themes/default/icon/cart_uncheck.jpg');?>");
+                    if ($('.check.selected').length < $('.goods').length){
+                        $('.checkall').removeClass('selected');
+                    }
+                }else{
+                    $(this).addClass('selected').attr('src', "<?php echo base_url('themes/default/icon/cart_checked.jpg');?>");
+                    if ($('.check.selected').length == $('.goods').length){
+                        $('.checkall').addClass('selected');
+                    }
                 }
-                $boxList.append(list)
+                calcMoney();
+            });
+            /**
+             * 全选 全消
+             */
+            $('.checkall').on('click', function(){
+                if ($(this).hasClass('selected')){
+                    $(this).removeClass('selected');
+                    $('.check').removeClass('selected').attr('src',"<?php echo base_url('themes/default/icon/cart_uncheck.jpg');?>");
+                }else{
+                    $(this).addClass('selected');
+                    $('.check').addClass('selected').attr('src', "<?php echo base_url('themes/default/icon/cart_checked.jpg');?>");
+                }
+                calcMoney();
+            });
+            /**
+             * 去结算操作
+             */
+            $('.tobuy').on('click', function(){
+                var cartids = '';
+                $('.check.selected').each(function(){
+                    var cartid = $(this).attr('cartid');
+                    if(cartids == ''){
+                        cartids = cartid;
+                    }else{
+                        cartids += ','+cartid;
+                    }
+                });
+                console.log(cartids)
+                $.post("<?php echo site_url('cart/confirm');?>", { cartids:cartids}, function(jd){
+                    if(jd.success){
+                        location.href = jd.msg;
+                    }
+                }, 'json');
+
+            });
+        });
+        /**
+         * 计算商品总额 和 应付金额
+         */
+        function calcMoney(){
+            var payablemoney = 0 ;
+            var selectednum = 0;
+            $('.totalmoney').each(function(){
+                var money = parseFloat($(this).html());
+                if($(this).closest('.clearfix').find('.check').hasClass('selected')){
+                    payablemoney = payablemoney + money;
+                    selectednum ++;
+                }
+            });
+
+            $('.payablemoney').html(payablemoney.toFixed(2));
+//        $('.selectednum').html(selectednum);
+
+            if(selectednum == 0){
+                $('.tobuy').addClass('disabled');
+            }else{
+                $('.tobuy').removeClass('disabled');
             }
-        }, 'json');
+        }
     </script>
 </body>
 </html>

@@ -13,7 +13,6 @@ class Order extends Home_Controller{
 
 	#从购物车>购买
 	public function cart_order(){
-             var_dump(APP_ID);
 		$this -> output -> enable_profiler(TRUE);
 		#获取购物车数据
 		$user = $this->session->userdata('user');
@@ -27,8 +26,9 @@ class Order extends Home_Controller{
 				$data['address'] = $this->address_model->get_mainAddress($user['user_id']);
 			else
 				$data['address'] = $this->address_model->get_firstAddress($user['user_id']);
-			$data['carts'] = $this->cart->contents();
 
+			$data['carts'] =$this->cache->get("order_confirm_goods_" . $user['user_id']);
+            var_dump(json_encode($data));
 			$this->load->view('order.html',$data);
 			}
 		

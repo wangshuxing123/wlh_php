@@ -185,8 +185,43 @@
     color: #cc3300;
     margin: 0.5rem;
 }
-
-
+.footerdiv{
+    position: fixed;
+    left:0;
+    bottom: 2rem;
+    width: 16rem;
+}
+.checkall{
+    display: inline-block;
+    line-height: 50px;
+    margin-left: 15px;
+    padding-left: 24px;
+    color: #333;
+    background: url(../icon/cart_uncheck.jpg) no-repeat 0 14px;
+}
+.selected{
+     background: url(../icon/cart_checked.jpg) no-repeat 0 14px;
+ }
+.sumdiv{
+    float: right;
+    line-height: 50px;
+    color: #666;
+}
+.tobuy{
+    display: inline-block;
+    width: 30%;
+    line-height: 50px;
+    text-align: center;
+    margin-left: 20px;
+    float: right;
+    color: #FFF;
+    background-color:#e7011f;
+}
+.disabled{
+     background: #e5e5e5;
+     color: #9c9c9c;
+     cursor: not-allowed;
+ }
 
 
 

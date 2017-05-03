@@ -9,7 +9,7 @@ class Home extends Home_Controller{
 		$this->load->model('goods_model');
 	}
 	public function index(){
-		$this -> output -> enable_profiler(TRUE);
+//		$this -> output -> enable_profiler(TRUE);
 		$user = $this->session->userdata('user');
 		
 //		if (empty($user)){
