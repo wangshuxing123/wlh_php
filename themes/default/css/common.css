@@ -74,6 +74,10 @@
     text-align: center;
     margin-bottom: 2.5rem;
 }
+.banner img{
+    width: 10rem;
+    margin: 0 auto;
+}
 .messList li{
     height: 36px;
     line-height: 36px;
