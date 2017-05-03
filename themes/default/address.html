@@ -12,7 +12,7 @@
     <title>新增地址</title>
     <link rel="stylesheet" href="css/public.css">
     <link rel="stylesheet" href="css/common.css">
-    <script type="text/javascript" src="lib/jquery-2.1.4.js"></script>
+    <script src="js/zepto.min.js"></script>
     <script>
         (function(){
             function change(){
@@ -29,60 +29,85 @@
         <span>新增地址</span>
         <a></a>
     </div>
-    <div class="address">
-        <input type="text" id="addressid" placeholder="请输入收货地址。。">
-    </div>
-    <div class="listCont">
-        <ul>
-            <li class="clearfix libox">
-                <img src="img/1.jpg" alt="">
-                <span>中石化加油卡</span>
-                <div>
-                    <p class="p1">￥179</p>
-                    <p class="p2">X3</p>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div class="priceBox clearfix">
-        <ul class="ul1">
-            <li>商品总金额：</li>
-            <li>运费：</li>
-            <li style="color: #666666">总金额（含运费）：</li>
-        </ul>
-        <ul class="ul2">
-            <li>￥888</li>
-            <li>+￥8</li>
-            <li style="color: red; font-size: 16px;">+￥998.0</li>
-        </ul>
+    <div class="plusAddress">
+        <form id="mainForm">
+            <ul>
+                <li>
+                    <span>收货人</span>
+                    <input type="text" placeholder="姓名" name="acceptname">
+                </li>
+                <li>
+                    <span>手机号</span>
+                    <input type="text" placeholder="11位手机号" name="mobile">
+                </li>
+                <li>
+                    <span>省/直辖市</span>
+                    <input type="text" placeholder="省/直辖市" name="region">
+                </li>
+                <li>
+                    <span>市</span>
+                    <input type="text" placeholder="市">
+                </li>
+                <li>
+                    <span>区县</span>
+                    <input type="text" placeholder="区县">
+                </li>
+                <li>
+                    <span>详细地址</span>
+                    <input type="text" placeholder="详细地址" name="addr">
+                </li>
+            </ul>
+        </form>
     </div>
     <div>
-        <button class="confirmBtn " id="submit_order">提交订单</button>
+        <button class="confirmBtn save">保存</button>
     </div>
     <script>
-        // 提交订单并微信支付
-        var submitflag = false;
-        $('#submit_order').on('click', function(){
-            if(submitflag){
+        var saveflag = false;
+        $('.save').on('click', function(){
+            if(saveflag){
+                return;
+            }
+//            var addressid = $('input[name="addressid"]').val();
+            var acceptname = $.trim($('input[name="acceptname"]').val());
+            if(acceptname == ''){
+                alert('请输入收货人姓名！');
                 return;
             }
 
-            var addressid = $('#addressid').val();
-            if(addressid == ''){
-                alert('请输入收货地址！');
+            var regionid = $('select[name="region"]').val();
+            if(regionid === ''){
+                alert('请输入地址区域！');
                 return;
             }
 
-            submitflag = true;
-            $.post('/order/submit_order', $('#confirm_form').serialize(), function(jd){
+            var addr = $.trim($('textarea[name="addr"]').val());
+            if(addr == ''){
+                alert('请输入详细地址信息！');
+                return;
+            }
+            var mobile = $.trim($('input[name="mobile"]').val());
+            if(!$.validator(mobile, 'req') ||!$.validator(mobile, 'phone')){
+                alert('请输入正确格式的11位手机号！');
+                return;
+            }
+            saveflag = true;
+            $.post('/profile/save_address', $('#mainForm').serialize(), function(jd){
+                {redirecturl url='home/signin'}
                 if(jd.success){
-                    submitflag = false;
-                    location.href = '/order/online_charge/' + jd.data;
+                    alert('保存成功');
+                    var from = $('#from').val();
+                    if(from == ''){
+                        location.href = '/profile/address';
+                    }else{
+                        location.href = '/order/confirm';
+                    }
                 }else{
-                    $.alert(jd.msg);
-                    submitflag = false;
+                    alert(jd.msg);
+                    saveflag = false;
                 }
             }, 'json');
+
         });
     </script>
 </body>

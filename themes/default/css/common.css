@@ -291,8 +291,26 @@
     margin: 0 auto;
     display: block;
 }
-
-
+.plusAddress{
+    margin-top: 5px;
+    padding: 0 10px;
+    margin-bottom: 30px;
+}
+.plusAddress li{
+    height: 36px;
+    line-height: 36px;
+    font-size: 18px;
+    border-bottom:1px solid #cccccc;
+}
+.plusAddress input{
+    border: none;
+    outline: none;
+    padding-left: 10px;
+}
+.plusAddress span{
+    width: 64px;
+    display: inline-block;
+}
 
 
 
