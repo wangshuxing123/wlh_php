@@ -34,34 +34,30 @@ class Order extends Home_Controller{
 	}
     #直接购买
     public function buy_now(){
-        $this -> output -> enable_profiler(TRUE);
+//        $this -> output -> enable_profiler(TRUE);
         //未登陆不可直接购买
         $user = $this->session->userdata('user');
         if (empty($user)){
-            $this->load->view('login.html');
+            $data["success"]=-1;
+            $data["msg"]='登录失效，请重新登录！';
+            $data["url"]=site_url('user/login');
         }
         else{
-            //获取收货地址
-            $num=$this->address_model->get_mainNum($user['user_id']);
-//            if($num==1)
-//                $data['address'] = $this->address_model->get_mainAddress($user['user_id']);
-//            else
-//                $data['address'] = $this->address_model->get_firstAddress($user['user_id']);
             //获取提交商品信息
             $good['id'] = $this->input->post('goods_id');
             $good['name'] = $this->input->post('goods_name');
-            $good['qty'] = 2;//wll$this->input->post('goods_nums');
-            $good['price'] = 12.2;//$this->input->post('shop_price');
+            $good['qty'] = $this->input->post('goods_nums');
+            $good['price'] = $this->input->post('shop_price');
             $good['subtotal'] = floatval($good['price'])*intval($good['qty']);
             $arr= array();
             array_push($arr,$good);
-            $data['goods']=$arr;
-            $data['totalAmount']=floatval($good['price'])*intval($good['qty']);
-            $this->cache->save("order_confirm_goods_".$user['user_id'], $data);
-            var_dump( $this->cache->get("order_confirm_goods_".$user['user_id']));
-            $this->load->view('order_confirm.html',$data);
+            $goods['goods']=$arr;
+            $goods['totalAmount']=floatval($good['price'])*intval($good['qty']);
+            $this->cache->save("order_confirm_goods_".$user['user_id'], $goods);
+            $data['success']=1;
+            $data['msg']=site_url('order/cart_order');
         }
-
+            echo json_encode($data);
     }
     //提交订单
 	public function submit_order(){

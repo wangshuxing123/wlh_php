@@ -101,7 +101,22 @@
                     }
                 }, 'json');
         });
+        // 直接购买
+        $('.addnow').on('click', function(){
+            var goods_id = $('#goods_id').val();
+            var goods_name =$('#goods_name').val();
+            var shop_price = $('#shop_price').val();
+            var goods_nums = $('#good_nums').val();
 
+            $.post("<?php echo site_url('order/buy_now');?>", { goods_id:goods_id, goods_name:goods_name, goods_nums:goods_nums, shop_price:shop_price}, function(jd){
+                if(jd.success==1){
+                    location.href=jd.msg;
+                }else{
+                    $.alert(jd.msg, "提醒");
+                    location.href=jd.url;
+                }
+            }, 'json');
+        });
     </script>
 
 </body>
