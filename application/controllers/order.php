@@ -112,8 +112,9 @@ class Order extends Home_Controller{
      */
     public function online_charge($id = 0)
     {
-        $query = $this->db->query('SELECT id, orderno, realamount, status FROM tb_order WHERE order_sn=?', array($id));
-        $data['order']=$query->row();
+//        $this -> output -> enable_profiler(TRUE);
+        $query = $this->db->query('SELECT order_id, order_sn, order_amount, order_status FROM ci_order WHERE order_sn= ?', array($id));
+        $data['order']=$query->row_array();
         $this->load->view('online_charge.html',$data);
     }
     /**
@@ -124,7 +125,7 @@ class Order extends Home_Controller{
         $user = $this->session->userdata('user');
         $userid = strval($user['user_id']);
 
-        $openid = get_cookie('aye_openid');
+//        $openid = get_cookie('aye_openid');
         $total_fee = $this->input->post('amount');
         $orderid = $this->input->post('orderid');
         $orderno = $this->input->post('orderno');
@@ -133,17 +134,17 @@ class Order extends Home_Controller{
 //            $total_fee = 1;
 //        }
 
-        if(!empty($userid)){
-            // 微信支付
-            $body = '微商城下单';
-            $notify_url = 'http://wechat.a-ye.cn/entry/wx_pay_success';
-            $data = wx_pay($orderid, $orderno, $body, $notify_url, $total_fee, 'JSAPI', $openid);
-
-            render_success_json($data);
-        }else{
-            $this->smarty->assign('errMsg','登录状态失效，请重新登录！');
-            $this->smarty->view('error.tpl');
-        }
+//        if(!empty($userid)){
+//            // 微信支付
+//            $body = '微商城下单';
+//            $notify_url = 'http://wechat.a-ye.cn/entry/wx_pay_success';
+//            $data = wx_pay($orderid, $orderno, $body, $notify_url, $total_fee, 'JSAPI', $openid);
+//
+//            render_success_json($data);
+//        }else{
+//            $this->smarty->assign('errMsg','登录状态失效，请重新登录！');
+//            $this->smarty->view('error.tpl');
+//        }
     }
 
     /**
@@ -158,7 +159,9 @@ class Order extends Home_Controller{
     function wx_pay($orderid, $out_trade_no, $body, $notify_url, $total_fee, $trade_type, $openid='')
     {
         $_CI = &get_instance();
-        $appid = $_CI->wxcpt->get_wx_appid();
+        $helper = new WxPayHelper();
+        $appid = APP_ID;
+        $appkey = "";//appkey需要配置
         $mch_id = $_CI->wxcpt->get_wx_mchid();
 
         $param = array();
@@ -168,7 +171,7 @@ class Order extends Home_Controller{
         $param['spbill_create_ip'] = $_SERVER['REMOTE_ADDR'];  //终端ip
         $param['trade_type'] = $trade_type;
         $param['product_id'] = $out_trade_no;
-        $param['nonce_str'] = nonce_str();  //随机字符串
+        $param['nonce_str'] =  $helper->getRandChar(32);  //随机字符串
         if ($trade_type != 'NATIVE')
         {
             $param['openid'] = $openid;
@@ -178,12 +181,11 @@ class Order extends Home_Controller{
         $param['out_trade_no'] = $out_trade_no;
         $param['notify_url'] = $notify_url;
         $param['attach'] = $orderid;
-        $param['sign'] = signval($param);
-
+        $param['sign'] =  $helper->getSign($param,$appkey);
         $url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-        $xml = array_to_xml($param);
-        $resultXml = http_post_by_data($xml,$url);
-        $result = xml_to_array($resultXml);
+        $xml = $helper->arrayToXml($param);
+        $resultXml =$helper->postXmlCurl($xml,$url);
+        $result = $helper->xmlToArray($resultXml);
 
 //        log_message('debug', 'pay_result:'.json_encode($result));
 
@@ -197,10 +199,10 @@ class Order extends Home_Controller{
         $data = array();
         $data['appId'] = $appid;
         $data["timeStamp"] = strval(time());
-        $data["nonceStr"] = nonce_str();
+        $data["nonceStr"] = $helper->getRandChar(32);
         $data["package"] = 'prepay_id='.$prepay_id;
         $data["signType"] = "MD5";
-        $data["paySign"] = signval($data);
+        $data["paySign"] = $helper->getSign($data,$appkey);
         $data['orderid'] = $orderid;
         $data['orderno'] = strval($out_trade_no);
         $data['code_url'] = $code_url;

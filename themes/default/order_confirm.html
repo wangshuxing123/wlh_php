@@ -89,7 +89,7 @@
             $.post("<?php echo site_url('order/submit_order');?>", $('#confirm_form').serialize(), function(jd){
                 if(jd.success==1){
                     submitflag = false;
-                    location.href ="<?php echo site_url('order/online_charge');?>" + jd.data;
+                    location.href ="<?php echo site_url('order/online_charge');?>"+"/"+jd.data;
                 }else{
                     $.alert(jd.msg);
                     submitflag = false;
