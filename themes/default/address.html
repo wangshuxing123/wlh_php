@@ -98,20 +98,15 @@
                     return;
                 }
                 var mobile = $.trim($('input[name="mobile"]').val());
-                if(!$.validator(mobile, 'req') ||!$.validator(mobile, 'phone')){
-                    alert('请输入正确格式的11位手机号！');
-                    return;
-                }
+//                if(!$.validator(mobile, 'req') ||!$.validator(mobile, 'phone')){
+//                    alert('请输入正确格式的11位手机号！');
+//                    return;
+//                }
                 saveflag = true;
                 $.post("<?php echo site_url('/address/create_address');?>", $('#mainForm').serialize(), function(jd){
                     if(jd.success){
                         alert('保存成功');
-                        var from = $('#from').val();
-                        if(from == ''){
-                            location.href = '/profile/address';
-                        }else{
-                            location.href = '/order/confirm';
-                        }
+                        location.href = jd.msg;
                     }else{
                         alert(jd.msg);
                         saveflag = false;
@@ -121,14 +116,14 @@
 
             // 省份变化 加载市
             $('select[name="province"]').on('change', function(){
-                var provinceid = $(this).val();
-                if(provinceid == ''){
-                    $('select[name="city"]').html('<option value="" selected>市</option>');
-                    $('select[name="city"]').trigger('change');
-                    return;
-                }
-                $.post("<?php echo site_url('/address/find_citys_by_province');?>", { provinceid:provinceid}, function(jd){
-                    if(jd.success){
+                        var provinceid = $(this).val();
+                        if(provinceid == ''){
+                            $('select[name="city"]').html('<option value="" selected>市</option>');
+                            $('select[name="city"]').trigger('change');
+                            return;
+                        }
+                        $.post("<?php echo site_url('/address/find_citys_by_province');?>", { provinceid:provinceid}, function(jd){
+                            if(jd.success){
                         var strHtml = '';
                         for(var i=0;i<jd.data.length;i++){
                             if(i == 0){

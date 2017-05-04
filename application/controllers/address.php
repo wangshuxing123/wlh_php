@@ -46,7 +46,7 @@ class Address extends Home_Controller{
 	public function create_address(){
 		#设置验证规则
 		$user = $this->session->userdata('user');
-		$this->form_validation->set_rules('consignee','收货人姓名','trim|required');
+		$this->form_validation->set_rules('acceptname','收货人姓名','trim|required');
 		if ($this->form_validation->run() == false) {
 			# 未通过验证
 			$data['message'] = validation_errors(); 
@@ -59,26 +59,21 @@ class Address extends Home_Controller{
 			$data['consignee'] = $this->input->post('acceptname',true);
 			$data['province'] = $this->input->post('province');
 			$data['city'] = $this->input->post('city',true);
-			$data['district'] = $this->input->post('district',true);
+			$data['district'] = $this->input->post('region',true);
 			$data['street'] = $this->input->post('addr',true);
 			$data['mobile'] = $this->input->post('mobile');
-			 var_dump($data);
-
 
 			#调用model方法完成插入
 			if ($this->address_model->add_address($data)){
 				#插入ok
-				$data['message'] = '添加成功'; 
-				$data['wait'] = 2;
-				$data['url'] = site_url('address/show_address');
-				$this->load->view('message.html',$data);
+				$data['success'] = 1;
+                $data['msg'] = "address/show_address";
 			} else{
 				#插入失败
-				$data['message'] = '添加商品类别失败'; 
-				$data['wait'] = 3;
-				$data['url'] = site_url('address/show_address');
-				$this->load->view('message.html',$data);
+                $data['success'] = -1;
+                $data['msg'] = "添加失败！";
 			}
+			echo json_encode($data);
 		}
 		
 	}
