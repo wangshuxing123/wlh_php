@@ -67,7 +67,7 @@ class Address extends Home_Controller{
 			if ($this->address_model->add_address($data)){
 				#插入ok
 				$data['success'] = 1;
-                $data['msg'] = "address/show_address";
+                $data['msg'] = "show_address";
 			} else{
 				#插入失败
                 $data['success'] = -1;
