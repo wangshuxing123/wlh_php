@@ -20,8 +20,6 @@
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 
 <style type="text/less">
-
-
     .invoiceinfo{
         padding-top: 10px;
         padding-left: 20px;
