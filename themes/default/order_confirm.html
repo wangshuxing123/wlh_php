@@ -102,7 +102,7 @@
                 return;
             }
 
-            var addressid =11;// $('#addressid').val();
+            var addressid = $('#addressid').val();
             if(addressid == ''){
                 alert('请输入收货地址！');
                 return;
@@ -117,7 +117,7 @@
                     submitflag = false;
                     location.href ="<?php echo site_url('order/online_charge');?>"+"/"+jd.data;
                 }else{
-                    $.alert(jd.msg);
+                    alert(jd.msg);
                     submitflag = false;
                 }
             }, 'json');

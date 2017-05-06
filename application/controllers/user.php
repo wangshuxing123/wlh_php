@@ -22,9 +22,9 @@ class User extends Home_Controller{
 //$this -> output -> enable_profiler(TRUE);
 		#设置验证规则
 		$this->form_validation->set_rules('username','用户名','required', array('required' => '用户名为必填！'));
-		$this->form_validation->set_rules('password','密码','required|min_length[6]|max_length[16]|md5');
+		$this->form_validation->set_rules('password','密码','required|min_length[6]|max_length[16]|md5' );
 		$this->form_validation->set_rules('repassword','重复密码','required|matches[password]');
-
+        $this->form_validation->set_message('min_length', '{field} 最少 {param}个字符.');
 
 		if ($this->form_validation->run() == false) {
 			# 未通过
