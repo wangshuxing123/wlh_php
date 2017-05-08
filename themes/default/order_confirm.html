@@ -11,6 +11,10 @@
     <title>订单确认</title>
     <link rel="stylesheet" href="<?php echo base_url('themes/default/css/public.css');?>">
     <link rel="stylesheet" href="<?php echo base_url('themes/default/css/common.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/lib/weui.min0803.css');?>">
+    <link rel="stylesheet" href="<?php echo base_url('themes/default/lib/jquery-weui.min.css');?>">
+    <script src="<?php echo base_url('themes/default/lib/jquery-2.1.4.js');?>" type="text/javascript" charset="utf-8"></script>
+    <script src="<?php echo base_url('themes/default/lib/jquery-weui.min.js');?>" type="text/javascript" charset="utf-8"></script>
     <script>
         (function(){
             function change(){
@@ -32,7 +36,8 @@
     </form>
 
     <div class="address">
-        <a href="<?php if (empty($address)):?><?php echo site_url('address/add_address');?><?php else :?>javascript:;<?php endif;?>" class="weui_media_box weui_media_appmsg weui_cell " data-target="#address_popup">
+        <!--<a href="<?php if (empty($address)):?><?php echo site_url('address/add_address');?><?php else :?>javascript:;<?php endif;?>" class="weui_media_box weui_media_appmsg weui_cell open-popup" data-target="#address_popup">-->
+        <a href="javascript:;" class="weui_media_box weui_media_appmsg weui_cell open-popup" data-target="#address_popup">
             <div class="weui_media_hd" style="width: 20px;">
                 <img class="weui_media_appmsg_thumb" src="<?php echo base_url('themes/default/img/location.jpg');?>"  height="20px" width="20px" alt="">
             </div>
@@ -49,16 +54,16 @@
     </div>
     <div class="listCont">
         <ul>
-            <?php foreach($carts['goods'] as $cart) :?>
-            <li class="clearfix libox">
-                <img src="<?php echo base_url('public/uploads/shihua.jpg');?>" alt="">
-                <span><?php echo $cart['name'];?></span>
-                <div>
-                    <p class="p1">￥<?php echo $cart['price'];?></p>
-                    <p class="p2">X<?php echo $cart['qty'];?></p>
-                </div>
-            </li>
-            <?php endforeach;?>
+            <!--<?php foreach($carts['goods'] as $cart) :?>-->
+            <!--<li class="clearfix libox">-->
+                <!--<img src="<?php echo base_url('public/uploads/shihua.jpg');?>" alt="">-->
+                <!--<span><?php echo $cart['name'];?></span>-->
+                <!--<div>-->
+                    <!--<p class="p1">￥<?php echo $cart['price'];?></p>-->
+                    <!--<p class="p2">X<?php echo $cart['qty'];?></p>-->
+                <!--</div>-->
+            <!--</li>-->
+            <!--<?php endforeach;?>-->
         </ul>
     </div>
     <div>
@@ -79,8 +84,9 @@
     <div>
         <button class="confirmBtn " id="submit_order">提交订单</button>
     </div>
-    <div id="address_popup" class='weui-popup-container'>
-        <div class="weui-popup-modal addresslist" style="background-color: #FFF;">
+    <div id="address_popup" class='weui-popup__container'>
+        <div class="weui-popup__overlay"></div>
+        <div class="weui-popup__modal addresslist" style="background-color: #FFF;">
             <div class="weui_cells_title">请选择送货地址 <a class="fr  close-popup" href="/profile/address" style="color: #e70012;">管理</a> </div>
             <div class="weui_panel weui_panel_access address" addressid="" style="cursor: pointer;">
                 <div class="weui_panel_bd">
@@ -90,10 +96,8 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    <script src="<?php echo base_url('themes/default/js/zepto.min.js');?>" type="text/javascript" charset="utf-8"></script>
     <script>
         // 提交订单并微信支付
         var submitflag = false;
@@ -123,18 +127,18 @@
             }, 'json');
         });
         // 选择其他地址
-        $('.address').on('click', function(){
+        $('.baddress').on('click', function(){
             var addressid = $(this).attr('addressid');
             var acceptname = $(this).find('.acceptname').html();
             var mobile = $(this).find('.mobile').html();
             var fuladdr = $(this).find('.fuladdr').html();
 
             var strHtml = '';
-            strHtml += '<h4 class="weui_media_title">收货人：'+acceptname+'</h4><p class="weui_media_desc"style="font-size: 14px;line-height: 20px;">联系电话：'+mobile+'</p><p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">收货地址：'+fuladdr+'</p>';
+            strHtml += '<h4 class="weui_media_title">收货人：'+acceptname+'</h4><p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">联系电话：'+mobile+'</p><p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">收货地址：'+fuladdr+'</p>';
             $('.selected_address').html(strHtml);
             $('input[name=addressid]').val(addressid);
 
-            $('#address_popup .close-popup').trigger('click');
+//            $('#address_popup .close-popup').trigger('click');
         });
     </script>
 </body>
