@@ -54,16 +54,16 @@
     </div>
     <div class="listCont">
         <ul>
-            <!--<?php foreach($carts['goods'] as $cart) :?>-->
-            <!--<li class="clearfix libox">-->
-                <!--<img src="<?php echo base_url('public/uploads/shihua.jpg');?>" alt="">-->
-                <!--<span><?php echo $cart['name'];?></span>-->
-                <!--<div>-->
-                    <!--<p class="p1">￥<?php echo $cart['price'];?></p>-->
-                    <!--<p class="p2">X<?php echo $cart['qty'];?></p>-->
-                <!--</div>-->
-            <!--</li>-->
-            <!--<?php endforeach;?>-->
+            <?php foreach($carts['goods'] as $cart) :?>
+            <li class="clearfix libox">
+                <img src="<?php echo base_url('public/uploads/shihua.jpg');?>" alt="">
+                <span><?php echo $cart['name'];?></span>
+                <div>
+                    <p class="p1">￥<?php echo $cart['price'];?></p>
+                    <p class="p2">X<?php echo $cart['qty'];?></p>
+                </div>
+            </li>
+            <?php endforeach;?>
         </ul>
     </div>
     <div>
