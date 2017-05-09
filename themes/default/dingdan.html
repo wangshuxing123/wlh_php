@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>往来惠</title>
+    <meta content="width=device-width,initial-scale=1, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no" name="viewport" id="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes"><!-- 删除苹果默认的工具栏和菜单栏 -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"><!-- 设置苹果工具栏颜色 -->
+    <meta name="format-detection" content="telphone=no, email=no"><!-- 忽略页面中的数字识别为电话，忽略email识别 -->
+    <!-- 启用360浏览器的极速模式(webkit) -->
+    <meta name="renderer" content="webkit">
+    <!-- 避免IE使用兼容模式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 针对手持设备优化，主要是针对一些老的不识别viewport的浏览器，比如黑莓 -->
+    <meta name="HandheldFriendly" content="true">
+    <!-- 微软的老式浏览器 -->
+    <meta name="MobileOptimized" content="320">
+    <!-- uc强制竖屏 -->
+    <meta name="screen-orientation" content="portrait">
+    <!-- QQ强制竖屏 -->
+    <meta name="x5-orientation" content="portrait">
+    <!-- UC强制全屏
+    <meta name="full-screen" content="yes">-->
+    <!-- QQ强制全屏
+    <meta name="x5-fullscreen" content="true">-->
+    <!-- UC应用模式 -->
+    <meta name="browsermode" content="application">
+    <!-- QQ应用模式 -->
+    <meta name="x5-page-mode" content="app">
+    <!-- windows phone 点击无高光 -->
+    <meta name="msapplication-tap-highlight" content="no">
+    <!-- 适应移动端end -->
+    <meta name="nightmode" content="enable/disable">
+    <meta name="imagemode" content="force">
+    <meta name="format-detection" content="telephone=no,email=no">
+    <link rel="stylesheet" href="css/public.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="lib/weui.min0803.css">
+    <!--<link rel="stylesheet" href="<?php echo base_url('themes/default/lib/weui.min0803.css');?>">-->
+    <script>
+        (function(){
+            function change(){
+                var font=document.documentElement.clientWidth/(320/20);
+                document.documentElement.style.fontSize=font+'px';
+            }
+            window.addEventListener('resize',change,false);
+            change();
+        })()
+    </script>
+</head>
+<body>
+    <div class="header">
+        <span>我的订单</span>
+        <a></a>
+    </div>
+    <div class="listbox clearfix">
+        <ul>
+            <li class="active">全部</li>
+            <li>待付款</li>
+            <li>待发货</li>
+            <li>待收货</li>
+        </ul>
+    </div>
+    <div class="contain">
+        <p style="margin: 2rem auto; width: 6rem">您还没有改类型的订单</p>
+    </div>
+    <div class="weui_panel weui_panel_access orderdiv" style="margin-top: 1.17em;">
+        <div class="weui_cells" style="margin-top: 0;">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary">
+                    <p style="font-size: 14px;">订单编号：3453453453</p>
+                </div>
+                <div class="weui_cell_ft stausname" orderid="{$item->id}" style="color: #e91021;font-size: 14px;">dsfgsdg</div>
+            </div>
+        </div>
+        <div class="weui_panel_bd">
+            <a href="" class="weui_media_box weui_media_appmsg" style="cursor: default;">
+                <div class="weui_media_hd">
+                    <img class="weui_media_appmsg_thumb" src="img/1.jpg" alt="" style="border: #eee solid 1px;border-radius: 3px;">
+                </div>
+                <div class="weui_media_bd" style="flex: 2;">
+                    <p class="weui_media_desc" style="color: #333;line-height: 20px;font-size: 14px;">uuuuuu</p>
+                </div>
+                <div class="weui_media_bd" style="font-size: 14px;">
+                    <div class="fr">￥6666</div><br>
+                    <div class="fr" style="text-decoration: line-through;color: #999;">￥6666</div><br>
+                    <div class="fr" style="color: #999;">X666</div>
+                </div>
+            </a>
+        </div>
+        <div class="weui_cells">
+            <div class="weui_cell">
+                <div class="weui_cell_bd weui_cell_primary"></div>
+                <div class="weui_cell_ft" style="font-size: 16px;">
+                    <div style="color: #666;">共5件商品 合计：<span style="color:#f28f00; ">￥55</span></div>
+                    <div style="color: #999;">(含运费：￥555)</div>
+                </div>
+            </div>
+            <div class="weui_cell">
+                <div class="weui_cell_ft operatediv" orderid="{$item->id}">
+                    <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_default cancel_order" orderid="{$item->id}" style="line-height: 2;background-color:#fff;border: #a1a1a1 solid 1px;color: #a1a1a1;border-radius: 10px;">取消订单</a>
+                    <a href="/order/online_charge/{$item->id}" class="weui_btn weui_btn_mini weui_btn_primary" style="line-height: 2;background-color:#fff;border: #e60111 solid 1px;color: #e60111;border-radius: 10px;">立即支付</a>
+                    <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_default cancel_order" orderid="{$item->id}" style="line-height: 2;background-color:#fff;border: #a1a1a1 solid 1px;color: #a1a1a1;border-radius: 10px;">取消订单</a>
+                    <a href="/order/comment_list/{$item->id}" class="weui_btn weui_btn_mini weui_btn_primary" style="line-height: 2;background-color:#fff;border: #e60111 solid 1px;color: #e60111;border-radius: 10px;">去评价</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footnav">
+        <ul>
+            <li><a href="javascript:;"><img src="icon/11.png" alt=""><p>首页</p></a></li>
+            <li><a href="javascript:;"><img src="icon/22ac.png" alt=""><p class="active">订单</p></a></li>
+            <li><a href="javascript:;"><img src="icon/33.png" alt=""><p>购物车</p></a></li>
+            <li><a href="javascript:;"><img src="icon/44.png" alt=""><p>会员中心</p></a></li>
+        </ul>
+    </div>
+    <script src="js/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>
