@@ -294,7 +294,20 @@ class Order extends Home_Controller{
             $this->load->view('myorder.html',$data);
         }
 	}
-	
+    //获取固定状态的订单
+    public function order($orderid){
+            $order_query = $this->db->query('select * from ci_order where  order_id=?', array($orderid));
+            $order = $order_query->row_array();
+
+            $id=$order['order_sn'];
+            $goods_query = $this->db->query('select * from ci_order_goods where  order_sn=?', array($id));
+            $goods=$goods_query->result_array();
+            $order['goods']=$goods;
+//            echo json_encode($result);
+            $data["order"]=$order;
+            $this->load->view('orderDetail.html',$data);
+        }
+
 		//获取订单下商品
 	public function get_goods($order_sn){
 		$this -> output -> enable_profiler(TRUE);
