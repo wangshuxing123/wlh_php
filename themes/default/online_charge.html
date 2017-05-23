@@ -25,11 +25,56 @@
             change();
         })()
     </script>
+    <script>
+        wx.config({
+            debug: false,
+            appId: '<?php echo $signPackage["appId"];?>',//jd.data.appId,
+            timestamp: '<?php echo $signPackage["timestamp"];?>',
+            nonceStr: '<?php echo $signPackage["nonceStr"];?>',
+            signature:'<?php echo $signPackage["signature"];?>', // 必填，微信签名，这个签名，和下面的paySign,所需用到的随机字符串和时间戳，最好和生成paySgin的保持一致。不是同一个。生成方法参考 http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html，可在页面 http://mp.weixin.qq.com/debug/cgi-bin/sandbox?t=jsapisign 进行校验。
+            jsApiList: [
+                'hideOptionMenu','chooseWXPay'
+            ] // 必填，需要使用的JS接口列表，列表可选参数，参考 http://mp.weixin.qq.com/wiki/7/aaa137b55fb2e0456bf8dd9148dd613f.html 附录2.
+        });
+        $(function(){
+            wx.ready(function(){
+                wx.hideOptionMenu();
+            });
+            $('.topay').on('click', function(){
+                var orderid = $(this).attr('orderid');
+                var orderno = $(this).attr('orderno');
+                var amount = $(this).attr('amount');
+                $.post("<?php echo site_url('order/to_pay');?>", { orderid:orderid,orderno:orderno,amount:amount }, function(jd){
+                    if(jd.success==1){
+                        wx.chooseWXPay({
+                            appId: jd.data.appId,
+                            timestamp: jd.data.timeStamp,
+                            nonceStr: jd.data.nonceStr,
+                            package: jd.data.package,
+                            signType: jd.data.signType,
+                            paySign: jd.data.paySign,
+                            success: function (res) {
+                                location.href="/order/" + jd.data.orderid;
+                            },
+                            fail: function (res) {
+                                alert('支付失败，请重试！');
+                            },
+                            cancel: function(){
+                                alert('微信支付已取消！');
+                            }
+                        });
+                    }else{
+//
+                    }
+                }, 'json');
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="header">
         <span>在线支付</span>
-        <a></a>
+        <a href="javascript :;" onClick="javascript :history.back(-1);"></a>
     </div>
     <div class="weui-msg">
         <div class="weui-icon-area" style="margin-bottom: 20px;"><i class="weui-icon-success weui-icon_msg" style="color: #e60012;"></i></div>
@@ -44,35 +89,5 @@
             </p>
         </div>
     </div>
-    <script>
-        $('.topay').on('click', function(){
-            var orderid = $(this).attr('orderid');
-            var orderno = $(this).attr('orderno');
-            var amount = $(this).attr('amount');
-            $.post("<?php echo site_url('order/to_pay');?>", { orderid:orderid,orderno:orderno,amount:amount }, function(jd){
-                if(jd.success){
-                    wx.chooseWXPay({
-                        appId: jd.data.appId,
-                        timestamp: jd.data.timeStamp,
-                        nonceStr: jd.data.nonceStr,
-                        package: jd.data.package,
-                        signType: jd.data.signType,
-                        paySign: jd.data.paySign,
-                        success: function (res) {
-                            location.href="/order/" + jd.data.orderid;
-                        },
-                        fail: function (res) {
-                            $.toast('支付失败，请重试！');
-                        },
-                        cancel: function(){
-                            $.toast('微信支付已取消！');
-                        }
-                    });
-                }else{
-
-                }
-            }, 'json');
-        });
-    </script>
 </body>
 </html>
