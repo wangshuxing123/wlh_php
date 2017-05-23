@@ -42,6 +42,8 @@ define('THEMES_DIR', 'themes/');
 
 //定义公众号常量信息
 define('APP_ID', 'wxfc6f0e9d4ede7c71');
+define('MCHILD', '1460548102');
+define('KEY', 'DarwinWLHWanLaiHui1234567890WLH1');
 define('APP_SECRET', '69c3cac94912c47f4624fa6407006a99');
 
 /* End of file constants.php */
