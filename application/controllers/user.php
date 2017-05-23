@@ -8,6 +8,16 @@ class User extends Home_Controller{
 		$this->load->library('form_validation');
 		$this->load->model('user_model');
 	}
+    #显示会员中心
+    public function profile()
+    {
+        $user = $this->session->userdata('user');
+        $user_id = strval($user['user_id']);
+
+        $query = $this->db->query('SELECT user_name, sex, img FROM ci_user WHERE user_id= ?', array($user_id));
+        $data['user']=$query->row_array();
+        $this->load->view('vip.html',$data);
+    }
 	#显示注册页面
 	public function register(){
 		$this->load->view('register.html');	
@@ -19,7 +29,6 @@ class User extends Home_Controller{
 	}
 
 	public function do_register(){
-//$this -> output -> enable_profiler(TRUE);
 		#设置验证规则
 		$this->form_validation->set_rules('username','用户名','required', array('required' => '用户名为必填！'));
 		$this->form_validation->set_rules('password','密码','required|min_length[6]|max_length[16]|md5' );
@@ -28,7 +37,6 @@ class User extends Home_Controller{
 
 		if ($this->form_validation->run() == false) {
 			# 未通过
-//            var_dump(validation_errors());
             $data['success']=-1;
             $data['msg']=validation_errors();
             echo json_encode($data);
