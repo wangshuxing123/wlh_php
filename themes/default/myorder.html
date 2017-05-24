@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="<?php echo base_url('themes/default/css/public.css');?>">
     <link rel="stylesheet" href="<?php echo base_url('themes/default/css/common.css');?>">
     <link rel="stylesheet" href="<?php echo base_url('themes/default/lib/weui.min0803.css');?>">
-    <script src="js/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="<?php echo base_url('themes/default/js/zepto.min.js');?>" type="text/javascript" charset="utf-8"></script>
 
     <script>
         (function(){
@@ -50,9 +50,9 @@
             }
             window.addEventListener('resize',change,false);
             change();
-        })()
+        })();
         $(function(){
-            $('.weui_navbar_item').on('click', function(){
+            $('.ui-item').on('click', function(){
                 $(this).addClass('active').siblings().removeClass('active');
                 var status = $(this).attr('status');
                 if(status == 0){
@@ -71,10 +71,10 @@
     </div>
     <div class="listbox clearfix">
         <ul>
-            <li class="active status = 0">全部</li>
-            <li class="weui_navbar_item status = 1">待付款</li>
-            <li class="weui_navbar_item status = 2">待发货</li>
-            <li class="weui_navbar_item status = 3">待收货</li>
+            <li class="active ui-item" status="0">全部</li>
+            <li class="ui-item" status="1">待付款</li>
+            <li class="ui-item" status="2">待发货</li>
+            <li class="ui-item" status="3">待收货</li>
         </ul>
     </div>
     <?php if (empty($orders)):?>
