@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="<?php echo base_url('themes/default/css/common.css');?>">
     <link rel="stylesheet" href="<?php echo base_url('themes/default/lib/weui.min0803.css');?>">
     <script src="<?php echo base_url('themes/default/js/zepto.min.js');?>" type="text/javascript" charset="utf-8"></script>
-    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
     <script>
         (function(){
             function change(){
@@ -36,12 +35,12 @@
                 <div class="weui_panel_bd" style="background-color: #e70012;padding: 10px 0;">
                     <div class="weui_media_box weui_media_appmsg">
                         <div class="weui_media_hd">
-                            <img class="weui_media_appmsg_thumb" src="http://wx.qlogo.cn/mmopen/ajNVdqHZLLDhmZjgYt2UVKvbgzCeoe8OhkKBTrs2TmS3CqXGVLy4bKa6diaMMxE9wAGWJm2CenqsPFHmB0jQ6nw/0" alt="" style="border-radius: 50%;">
+                            <img class="weui_media_appmsg_thumb" src="<?php echo $user['img'];?>" alt="" style="border-radius: 50%;">
                         </div>
                         <div class="weui_media_bd" style="margin-left: 5px;color: #fff;">
                             <div style="font-size: 18px;padding-bottom:5px;border-bottom: #f16671 solid 1px;">
-                                <img src="img/per.png" style="width: 20px;vertical-align: middle;margin-right: 5px;">
-                                <span style="vertical-align: middle;">Jeff</span>
+                                <img src="<?php echo base_url('themes/default/img/per.png');?>" style="width: 20px;vertical-align: middle;margin-right: 5px;">
+                                <span style="vertical-align: middle;"><?php echo $user['user_name'];?></span>
                             </div>
                         </div>
                     </div>
@@ -52,15 +51,15 @@
                 <div class="weui_panel_bd">
                     <div class="weui_media_box weui_media_small_appmsg">
                         <div class="weui_cells weui_cells_access">
-                            <a class="weui_cell" href="">
-                                <div class="weui_cell_hd"><img src="img/order.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+                            <a class="weui_cell" href="<?php echo site_url('order/get_orders/ALL')?>">
+                                <div class="weui_cell_hd"><img src="<?php echo base_url('themes/default/img/order.png');?>" alt="" style="width:20px;margin-right:5px;display:block"></div>
                                 <div class="weui_cell_bd weui_cell_primary" style="font-size: 16px;padding-left: 6px;">
                                     <p>我的订单</p>
                                 </div>
                                 <span class="weui_cell_ft"></span>
                             </a>
-                            <a class="weui_cell" href="">
-                                <div class="weui_cell_hd"><img src="img/adress.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+                            <a class="weui_cell" href="<?php echo site_url('address/show_address')?>">
+                                <div class="weui_cell_hd"><img src="<?php echo base_url('themes/default/img/adress.png');?>" alt="" style="width:20px;margin-right:5px;display:block"></div>
                                 <div class="weui_cell_bd weui_cell_primary" style="font-size: 16px;padding-left: 6px;">
                                     <p>地址管理</p>
                                 </div>
@@ -73,8 +72,13 @@
             <a href="javascript:;" class="weui_btn weui_btn_plain_primary logout" style="font-size:16px;width: 90%; margin-top: 20px;margin-bottom: 50px;border:#eee solid 1px;color: #999;">退出登录</a>
         </div>
     </div>
-    <script>
-
-    </script>
+    <div class="footnav">
+        <ul>
+            <li><a href="<?php echo site_url('/');?>"><img src="<?php echo base_url('themes/default/icon/11.png');?>" alt=""><p>首页</p></a></li>
+            <li><a href="<?php echo site_url('order/get_orders/ALL')?>"><img src="<?php echo base_url('themes/default/icon/22.png');?>" alt=""><p>订单</p></a></li>
+            <li><a href="<?php echo site_url('cart/show');?>"><img src="<?php echo base_url('themes/default/icon/33.png');?>" alt=""><p>购物车</p></a></li>
+            <li><a href="<?php echo site_url('user/profile')?>"><img src="<?php echo base_url('themes/default/icon/44ac.png');?>" alt=""><p>会员中心</p></a></li>
+        </ul>
+    </div>
 </body>
 </html>

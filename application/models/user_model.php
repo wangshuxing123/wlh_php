@@ -16,4 +16,9 @@ class User_model extends CI_Model{
 		$query = $this->db->where($condition)->get(self::TBL_USER);
 		return $query->row_array();
 	}
+    public function get_user_byopenid($openId){
+        $condition['open_id'] = $openId;
+        $query = $this->db->where($condition)->get(self::TBL_USER);
+        return $query->row_array();
+    }
 }

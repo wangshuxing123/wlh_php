@@ -62,7 +62,6 @@ class Address extends Home_Controller{
 			$data['district'] = $this->input->post('region',true);
 			$data['street'] = $this->input->post('addr',true);
 			$data['mobile'] = $this->input->post('mobile');
-
 			#调用model方法完成插入
 			if ($this->address_model->add_address($data)){
 				#插入ok

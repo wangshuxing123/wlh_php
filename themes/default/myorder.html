@@ -40,7 +40,7 @@
     <link rel="stylesheet" href="<?php echo base_url('themes/default/css/public.css');?>">
     <link rel="stylesheet" href="<?php echo base_url('themes/default/css/common.css');?>">
     <link rel="stylesheet" href="<?php echo base_url('themes/default/lib/weui.min0803.css');?>">
-
+    <script src="js/zepto.min.js" type="text/javascript" charset="utf-8"></script>
 
     <script>
         (function(){
@@ -51,6 +51,17 @@
             window.addEventListener('resize',change,false);
             change();
         })()
+        $(function(){
+            $('.weui_navbar_item').on('click', function(){
+                $(this).addClass('active').siblings().removeClass('active');
+                var status = $(this).attr('status');
+                if(status == 0){
+                    location.href = "<?php echo site_url('order/get_orders/ALL')?>";
+                }else{
+                    location.href ="<?php echo site_url('order/get_orders/')?>"+status;
+                }
+            });
+        });
     </script>
 </head>
 <body>
@@ -60,10 +71,10 @@
     </div>
     <div class="listbox clearfix">
         <ul>
-            <li class="active">全部</li>
-            <li>待付款</li>
-            <li>待发货</li>
-            <li>待收货</li>
+            <li class="active status = 0">全部</li>
+            <li class="weui_navbar_item status = 1">待付款</li>
+            <li class="weui_navbar_item status = 2">待发货</li>
+            <li class="weui_navbar_item status = 3">待收货</li>
         </ul>
     </div>
     <?php if (empty($orders)):?>
@@ -78,7 +89,15 @@
                 <div class="weui_cell_bd weui_cell_primary">
                     <p style="font-size: 14px;">订单编号：<?php echo $order['order_sn'];?></p>
                 </div>
-                <div class="weui_cell_ft stausname" orderid="{$item->id}" style="color: #e91021;font-size: 14px;">dsfgsdg</div>
+                <div class="weui_cell_ft stausname" orderid="{$item->id}" style="color: #e91021;font-size: 14px;">
+                    <?php switch($order['order_status'])
+                    {
+                    case 1: echo '待支付';break;
+                    case 2: echo '待发货';break;
+                    case 3: echo '已发货';break;
+                    default: echo '已完成';
+                    }?>
+                </div>
             </div>
         </div>
         	<?php foreach($order['goods'] as $good) :?>
@@ -110,9 +129,7 @@
             <div class="weui_cell">
                 <div class="weui_cell_ft operatediv" orderid="<?php echo $order['order_sn'];?>">
                     <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_default cancel_order" orderid="{$item->id}" style="line-height: 2;background-color:#fff;border: #a1a1a1 solid 1px;color: #a1a1a1;border-radius: 10px;">取消订单</a>
-                    <a href="<?php echo  site_url('order/online_charge/').$order['order_sn'];?>" class="weui_btn weui_btn_mini weui_btn_primary" style="line-height: 2;background-color:#fff;border: #e60111 solid 1px;color: #e60111;border-radius: 10px;">立即支付</a>
-                    <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_default cancel_order" orderid="{$item->id}" style="line-height: 2;background-color:#fff;border: #a1a1a1 solid 1px;color: #a1a1a1;border-radius: 10px;">取消订单</a>
-                    <a href="/order/comment_list/{$item->id}" class="weui_btn weui_btn_mini weui_btn_primary" style="line-height: 2;background-color:#fff;border: #e60111 solid 1px;color: #e60111;border-radius: 10px;">去评价</a>
+                    <a href="<?php echo  site_url('order/online_charge//').$order['order_sn'];?>" class="weui_btn weui_btn_mini weui_btn_primary" style="line-height: 2;background-color:#fff;border: #e60111 solid 1px;color: #e60111;border-radius: 10px;">立即支付</a>
                 </div>
             </div>
         </div>
@@ -122,11 +139,11 @@
     <div class="footnav">
         <ul>
            <li><a href="javascript:;"><img src="<?php echo base_url('themes/default/icon/11ac.png');?>" alt=""><p>首页</p></a></li>
-            <li><a href="<?php echo site_url('order/get_orders/ALL')?>"><img src="<?php echo base_url('themes/default/icon/22.png');?>" alt=""><p>订单</p></a></li>
+            <li><a href="<?php echo site_url('order/get_orders/ALL')?>"><img src="<?php echo base_url('themes/default/icon/22ac.png');?>" alt=""><p>订单</p></a></li>
             <li><a href="<?php echo site_url('cart/show');?>"><img src="<?php echo base_url('themes/default/icon/33.png');?>" alt=""><p>购物车</p></a></li>
-            <li><a href="javascript:;"><img src="<?php echo base_url('themes/default/icon/44.png');?>" alt=""><p>会员中心</p></a></li>
+            <li><a href="<?php echo site_url('user/profile')?>"><img src="<?php echo base_url('themes/default/icon/44.png');?>" alt=""><p>会员中心</p></a></li>
         </ul>
     </div>
-    <script src="js/zepto.min.js" type="text/javascript" charset="utf-8"></script>
+
 </body>
 </html>
