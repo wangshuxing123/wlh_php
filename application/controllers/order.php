@@ -104,6 +104,7 @@ class Order extends Home_Controller{
             $data["success"]=-1;
             $data["data"]='操作失败，请重新提交！';
         }
+	    log_message('error',json_encode($data));
         echo json_encode($data);
 	}
 
@@ -142,7 +143,7 @@ class Order extends Home_Controller{
         if(!empty($openid)){
             // 微信支付
             $body = '微商城下单';
-            $notify_url = 'http://xionganfamily.com.cn/order/wx_pay_success';
+            $notify_url = 'http://xionganfamily.com.cn/index.php/order/wx_pay_success';
 //            $result = wx_pay($orderid, $orderno, $body, $notify_url, $total_fee, 'JSAPI', $openid);
         //下面是wx_pay方法内的 拿出来调试
         $appid = APP_ID;
@@ -172,8 +173,6 @@ class Order extends Home_Controller{
 //        echo json_encode($xml);
         $resultXml =$this->wxhelper->postXmlCurl($xml,$url);
         $result = $this->wxhelper->xmlToArray($resultXml);
-//            var_dump($result);
-//            var_dump("wwwwwwwwwwwwwwwwwwwwwww");
             $prepay_id = $result["prepay_id"];
             $code_url = '';
             if(array_key_exists('code_url', $result))
@@ -245,8 +244,6 @@ class Order extends Home_Controller{
         $resultXml =$this->wxhelper->postXmlCurl($xml,$url);
         $result = $this->wxhelper->xmlToArray($resultXml);
 
-//        log_message('debug', 'pay_result:'.json_encode($result));
-
         $prepay_id = $result["prepay_id"];
         $code_url = '';
         if(array_key_exists('code_url', $result))
@@ -294,20 +291,7 @@ class Order extends Home_Controller{
             $this->load->view('myorder.html',$data);
         }
 	}
-    //获取固定状态的订单
-    public function order($orderid){
-            $order_query = $this->db->query('select * from ci_order where  order_id=?', array($orderid));
-            $order = $order_query->row_array();
-
-            $id=$order['order_sn'];
-            $goods_query = $this->db->query('select * from ci_order_goods where  order_sn=?', array($id));
-            $goods=$goods_query->result_array();
-            $order['goods']=$goods;
-//            echo json_encode($result);
-            $data["order"]=$order;
-            $this->load->view('orderDetail.html',$data);
-        }
-
+	
 		//获取订单下商品
 	public function get_goods($order_sn){
 		$this -> output -> enable_profiler(TRUE);
@@ -318,7 +302,54 @@ class Order extends Home_Controller{
   	 echo json_encode($goods);
   	 //$this->load->view('index.html',$orders);
 	}
+/**
+     * 微信支付成功 异步通知
+     */
+    public function wx_pay_success()
+    { log_message("error","wangshuxing====comming in ============");
+        $xml = file_get_contents("php://input");
+        $data =  $this->wxhelper->xmlToArray($xml);
+        log_message("error","wangshuxing=================".json_encode($data));
+        $signold = $data['sign'];
+        unset($data['sign']);
+        $sign = $this->wxhelper->getSign($data,KEY);
+        if ($signold == $sign) {
+            $data['sign'] = $sign;
+            $data['return_code'] = 'SUCCESS';
+            if($data['result_code'] == 'SUCCESS'){
+                $total_fee = floatval(intval($data['total_fee'])*0.01);
+                $orderid = intval($data['attach']);
+                $q = $this->db->query('SELECT order_id, order_sn, order_amount, order_status FROM ci_order WHERE order_id= ?',array($orderid));
+                $data = array();
+                if($q->num_rows() > 0){
+                    $row = $q->row();
 
+                    $this->db->trans_start();
+                    log_message("error","wangshuxing=====+++++++=".$row->order_status);
+                    if ($row->order_status == 1) //'订单状态 1 待付款 2 待发货 3 已发货 4 已完成',
+                    {
+                        $this->db->query('update ci_order set order_status =? WHERE order_id= ?',array(2,$orderid));
+                        //处理业务
+                    }
+
+                    $data['return_code']='SUCCESS';
+                    $this->db->trans_complete();
+                }else{
+                    $data['return_code']='FAIL';
+                    $data['return_msg']='支付失败，没有找到订单';
+                }
+            }else{
+                $data = array();
+                $data['return_code']='FAIL';
+                $data['return_msg']='签名失败';
+            }
+        }else{
+            $data = array();
+            $data['return_code']='FAIL';
+            $data['return_msg']='签名失败';
+        }
+        echo array_to_xml($data);
+    }
 	public function render_success_json($jd){
         $data["success"]=1;
         $data["data"]=$jd;

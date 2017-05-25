@@ -53,12 +53,13 @@
         })();
         $(function(){
             $('.ui-item').on('click', function(){
-                $(this).addClass('active').siblings().removeClass('active');
+//                $(this).addClass('active').siblings().removeClass('active');
                 var status = $(this).attr('status');
                 if(status == 0){
                     location.href = "<?php echo site_url('order/get_orders/ALL')?>";
                 }else{
-                    location.href ="<?php echo site_url('order/get_orders/')?>"+status;
+                    alert("<?php echo site_url('order/get_orders/')?>"+"/"+status)
+                    location.href ="<?php echo site_url('order/get_orders/')?>"+"/"+status;
                 }
             });
         });
@@ -71,10 +72,10 @@
     </div>
     <div class="listbox clearfix">
         <ul>
-            <li class="active ui-item" status="0">全部</li>
-            <li class="ui-item" status="1">待付款</li>
-            <li class="ui-item" status="2">待发货</li>
-            <li class="ui-item" status="3">待收货</li>
+            <li class="ui-item <?php if ($status==ALL) echo 'active';?>" status="0">全部</li>
+            <li class="ui-item <?php if ($status==1) echo 'active';?>" status="1">待付款</li>
+            <li class="ui-item <?php if ($status==2) echo 'active';?>" status="2">待发货</li>
+            <li class="ui-item <?php if ($status==3) echo 'active';?>" status="3">待收货</li>
         </ul>
     </div>
     <?php if (empty($orders)):?>

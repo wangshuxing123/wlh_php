@@ -14,8 +14,8 @@
 | path to your installation.
 |
 */
-$config['base_url']	='http://211.159.156.196/';
-    //'http://xionganfamily.com.cn/';
+//$config['base_url']	='http://211.159.156.196/';
+$config['base_url'] = 'http://xionganfamily.com.cn/';
 
 /*
 |--------------------------------------------------------------------------
