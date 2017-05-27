@@ -37,19 +37,20 @@
 
     <div class="address">
         <a href="<?php if (empty($address)):?><?php echo site_url('address/add_address');?><?php else :?>javascript:;<?php endif;?>" class="weui_media_box weui_media_appmsg weui_cell open-popup" data-target="#address_popup">
-        <a href="javascript:;" class="weui_media_box weui_media_appmsg weui_cell open-popup" data-target="#address_popup">
-            <div class="weui_media_hd" style="width: 20px;">
-                <img class="weui_media_appmsg_thumb" src="<?php echo base_url('themes/default/img/adress.png');?>"  height="20px" width="20px" alt="">
-            </div>
-            <div class="weui_media_bd selected_address">
-                <?php if (empty($address)) :?>
-                <h4 style="color: #999;">点击添加新地址</h4>
-                <?php else :?>
-                <h4 class="weui_media_title">收货人：<?php echo $address['consignee'];?></h4>
-                <p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">联系电话：<?php echo $address['mobile'];?></p>
-                <p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">收货地址：<?php echo $address['province'].$address['city'].$address['district'].$address['street'];?></p>
-                <?php endif;?>
-            </div>
+            <!--<a href="javascript:;" class="weui_media_box weui_media_appmsg weui_cell open-popup" data-target="#address_popup">-->
+                <div class="weui_media_hd" style="width: 20px;">
+                    <img class="weui_media_appmsg_thumb" src="<?php echo base_url('themes/default/img/adress.png');?>"  height="20px" width="20px" alt="">
+                </div>
+                <div class="weui_media_bd selected_address">
+                    <?php if (empty($address)) :?>
+                    <h4 style="color: #999;">点击添加新地址</h4>
+                    <?php else :?>
+                    <h4 class="weui_media_title">收货人：<?php echo $address['consignee'];?></h4>
+                    <p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">联系电话：<?php echo $address['mobile'];?></p>
+                    <p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">收货地址：<?php echo $address['province'].$address['city'].$address['district'].$address['street'];?></p>
+                    <?php endif;?>
+                </div>
+            <!--</a>-->
         </a>
     </div>
     <div class="listCont">
@@ -82,14 +83,15 @@
         </ul>
     </div>
     <div>
-        <button class="confirmBtn " id="submit_order">提交订单</button>
+        <!--<button class="confirmBtn weui_btn" id="submit_order">提交订单</button>-->
+        <a href="javascript:void(0);" id="submit_order" class="submit_order weui_btn weui_btn_primary" style="width: 90%; margin-top: 20px;margin-bottom: 50px;background-color: #e60012;">提交订单</a>
     </div>
     <div id="address_popup" class='weui-popup__container'>
-        <div class="weui-popup__overlay"></div>
+        <!--<div class="weui-popup__overlay"></div>-->
         <div class="weui-popup__modal addresslist" style="background-color: #FFF;">
             <div class="weui_cells_title">请选择送货地址 <a class="fr  close-popup" href="<?php echo site_url('address/show_address');?>" style="color: #e70012;">管理</a> </div>
             <?php foreach($addresslist as $addr) :?>
-            <div class="weui_panel weui_panel_access address" addressid="<?php echo $addr['address_id'];?>" style="cursor: pointer;">
+            <div class="weui_panel weui_panel_access address close-popup" addressid="<?php echo $addr['address_id'];?>" style="cursor: pointer;">
                 <div class="weui_panel_bd">
                     <div class="weui_media_box weui_media_text">
                         <h4 class="weui_media_title" style="font-size:16px;color: #666;line-height: 30px;"><span class="acceptname"><?php echo $addr['consignee'];?></span><span class="fr mobile"><?php echo $addr['mobile'];?></span></h4>
@@ -131,7 +133,7 @@
             }, 'json');
         });
         // 选择其他地址
-        $('.baddress').on('click', function(){
+        $('.address').on('click', function(){
             var addressid = $(this).attr('addressid');
             var acceptname = $(this).find('.acceptname').html();
             var mobile = $(this).find('.mobile').html();
@@ -141,7 +143,6 @@
             strHtml += '<h4 class="weui_media_title">收货人：'+acceptname+'</h4><p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">联系电话：'+mobile+'</p><p class="weui_media_desc" style="font-size: 14px;line-height: 20px;">收货地址：'+fuladdr+'</p>';
             $('.selected_address').html(strHtml);
             $('input[name=addressid]').val(addressid);
-
 //            $('#address_popup .close-popup').trigger('click');
         });
     </script>
