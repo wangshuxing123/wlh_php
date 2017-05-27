@@ -288,6 +288,7 @@ class Order extends Home_Controller{
             }
 //            echo json_encode($result);
             $data["orders"]=$result;
+            $data["status"]=$stats;
             $this->load->view('myorder.html',$data);
         }
 	}

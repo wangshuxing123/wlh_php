@@ -58,7 +58,6 @@
                 if(status == 0){
                     location.href = "<?php echo site_url('order/get_orders/ALL')?>";
                 }else{
-                    alert("<?php echo site_url('order/get_orders/')?>"+"/"+status)
                     location.href ="<?php echo site_url('order/get_orders/')?>"+"/"+status;
                 }
             });
@@ -72,10 +71,10 @@
     </div>
     <div class="listbox clearfix">
         <ul>
-            <li class="ui-item <?php if ($status==ALL) echo 'active';?>" status="0">全部</li>
-            <li class="ui-item <?php if ($status==1) echo 'active';?>" status="1">待付款</li>
-            <li class="ui-item <?php if ($status==2) echo 'active';?>" status="2">待发货</li>
-            <li class="ui-item <?php if ($status==3) echo 'active';?>" status="3">待收货</li>
+            <li class="ui-item <?php if ($status=='ALL'):?> active<?php else :?><?php endif;?>" status="0">全部</li>
+            <li class="ui-item <?php if ($status==1):?> active<?php else :?><?php endif;?>" status="1">待付款</li>
+            <li class="ui-item <?php if ($status==2):?> active<?php else :?><?php endif;?>" status="2">待发货</li>
+            <li class="ui-item <?php if ($status==3):?> active<?php else :?><?php endif;?>" status="3">待收货</li>
         </ul>
     </div>
     <?php if (empty($orders)):?>
@@ -128,10 +127,12 @@
                 </div>
             </div>
             <div class="weui_cell">
+                <?php if ($order['order_status']==1):?>
                 <div class="weui_cell_ft operatediv" orderid="<?php echo $order['order_sn'];?>">
                     <a href="javascript:;" class="weui_btn weui_btn_mini weui_btn_default cancel_order" orderid="{$item->id}" style="line-height: 2;background-color:#fff;border: #a1a1a1 solid 1px;color: #a1a1a1;border-radius: 10px;">取消订单</a>
-                    <a href="<?php echo  site_url('order/online_charge//').$order['order_sn'];?>" class="weui_btn weui_btn_mini weui_btn_primary" style="line-height: 2;background-color:#fff;border: #e60111 solid 1px;color: #e60111;border-radius: 10px;">立即支付</a>
+                    <a href="<?php echo  site_url('order/online_charge/').'/'.$order['order_sn'];?>" class="weui_btn weui_btn_mini weui_btn_primary" style="line-height: 2;background-color:#fff;border: #e60111 solid 1px;color: #e60111;border-radius: 10px;">立即支付</a>
                 </div>
+                <?php endif;?>
             </div>
         </div>
     </div>
