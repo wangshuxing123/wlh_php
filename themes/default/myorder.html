@@ -102,7 +102,7 @@
         </div>
         	<?php foreach($order['goods'] as $good) :?>
         	<div class="weui_panel_bd">
-            <a href="" class="weui_media_box weui_media_appmsg" style="cursor: default;">
+            <a href="javascript:;" class="weui_media_box weui_media_appmsg" style="cursor: default;">
             	      <div class="weui_media_hd">
                     <img class="weui_media_appmsg_thumb" src="<?php echo base_url('public/uploads').'/'.$good['goods_img'];?>" alt="" style="border: #eee solid 1px;border-radius: 3px;">
                 </div>
@@ -114,7 +114,6 @@
                     <div class="fr" style="text-decoration: line-through;color: #999;">￥<?php echo $good['goods_price'];?></div><br>
                     <div class="fr" style="color: #999;">X<?php echo $good['goods_number'];?></div>
                 </div>
-                
             </a>
         </div>
         <?php endforeach;?>
